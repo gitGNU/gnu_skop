@@ -29,6 +29,7 @@
 #include "skop.moc"
 #include "sphericalfield.h"
 #include "histodock.h"
+#include "pixeldock.h"
 
 //#include "healpixfield.h"
 #include <QFileDialog>
@@ -122,6 +123,8 @@ void Skop::createDockWindows()
      
      dock = new QDockWidget(tr("Pixel Information"), this);
      dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+     PixelDock *pd = new PixelDock(dock);
+     dock->setWidget(pd);
      addDockWidget(Qt::RightDockWidgetArea, dock);
      viewMenu->addAction(dock->toggleViewAction());
 
@@ -134,7 +137,10 @@ void Skop::createDockWindows()
 	     glview,SLOT(updateScale(double, double)));
      connect(selectionModel, SIGNAL(currentChanged ( const QModelIndex &, const QModelIndex &)),
 	     hd, SLOT(selectMap(const QModelIndex &,const QModelIndex &)));
-     
+     connect(selectionModel, SIGNAL(currentChanged ( const QModelIndex &, const QModelIndex &)),
+	     pd, SLOT(selectMap(const QModelIndex &,const QModelIndex &)));
+     connect(glview, SIGNAL(pixelSelected(double , double )),
+	     pd, SLOT(selectPixel(double, double)));
      viewMenu->addAction(dock->toggleViewAction());
 
      dock = new QDockWidget(tr("Overlay"), this);
@@ -152,11 +158,9 @@ void Skop::createModel()
 
 void Skop::about()
  {
-    QMessageBox::about(this, tr("About Dock Widgets"),
-             tr("The <b>Dock Widgets</b> example demonstrates how to "
-                "use Qt's dock widgets. You can enter your own text, "
-                "click a customer to add a customer name and "
-                "address, and click standard paragraphs to add them."));
+    QMessageBox::about(this, tr("About Skop"),
+             tr("The <b>Sky Orthographic Projector</b> is a powerfull tool "
+                "to visualize pixelized data on the sphere."));
  }
 
 void Skop::createActions()

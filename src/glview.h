@@ -1,4 +1,4 @@
-// Copyright 2007 Marc Betoule
+// Copyright (C) 2007, 2008 Marc Betoule
 
 // This file is part of SkOP.
 
@@ -26,6 +26,7 @@
 #define GLVIEW_H
 
 #include <QGLWidget>
+#include "toolbox.h"
 
 class QWidget;
 class Program;
@@ -37,12 +38,14 @@ class GLView : public QGLWidget
 public:
   GLView(QWidget *parent = 0);
   ~GLView();
-  void pixel2sky();
-  void sky2pixel();
+  bool pixel2sky(int x, int y, double & theta, double & phi);
+  //void sky2pixel();
 		  
 public slots:
     void updateShader(const QModelIndex & current);
     void updateScale(double minBound, double maxBound);
+signals:
+  void pixelSelected(double theta, double phi);
 protected:
     void initializeGL();
     void paintEvent(QPaintEvent *event);
@@ -64,7 +67,8 @@ private:
     double phi0;
     double minV;
     double maxV;
-
+  
+  Mat3 rot;
     int nside;
 };
 

@@ -1,4 +1,4 @@
-// Copyright 2007 Marc Betoule
+// Copyright (C) 2007, 2008 Marc Betoule
 
 // This file is part of SkOP.
 
@@ -22,8 +22,8 @@
  * \brief Miscellanous usefull tools
  */    
 
-#ifndef GLVIEW_H
-#define GLVIEW_H
+#ifndef TOOLBOX_H
+#define TOOLBOX_H
 #include <cmath>
 
 class Vec3{

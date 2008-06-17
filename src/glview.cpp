@@ -43,7 +43,7 @@ GLView::GLView(QWidget *parent)
     dist = 1;
     minV = 0;
     maxV = 0;
-    
+    rot.eulerZXZ(0,theta0, phi0);
     trolltechPurple = QColor::fromCmykF(0.39, 0.39, 0.0, 0.0);
     setAttribute(Qt::WA_NoSystemBackground);
     setMinimumSize(400, 400);
@@ -101,19 +101,29 @@ void GLView::wheelEvent ( QWheelEvent * e ){
   update();
 }
 
+bool GLView::pixel2sky(int x, int y, double & theta, double & phi){
+  double u = (2. * x / width()  - 1.) * dist;
+  double v = (2. * y / height() - 1.) * dist;
+  if( u*u+v*v <= 1){
+    theta = acos(v);
+    phi = acos(u/sin(theta));
+    Vec3 coord(theta,phi);
+    coord = rot * coord;
+    coord.ang(theta,phi);
+    return true;
+  }
+  return false;
+}
 
 void GLView::mousePressEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton)
 	lastPos = event->pos();
     else if (event->buttons() & Qt::RightButton) {
-	double u = (2. * event->x() / width()  - 1.) * dist;
-	double v = (2. * event->y() / height() - 1.) * dist;
-	if( u*u+v*v <= 1){
-	    double theta = acos(v);
-	    double phi = acos(u/sin(theta));
-	    cout << theta<< "," << phi << endl;
-	}
+      double theta, phi;
+      pixel2sky(event->x(), event->y(), theta, phi);
+      emit pixelSelected(theta, phi);
+      cout << theta<< "," << phi << endl;
     }
     
 }
@@ -128,14 +138,7 @@ void GLView::mouseMoveEvent(QMouseEvent *event)
 	lastPos = event->pos();
 	update();
     }
-    
-    // if (event->buttons() & Qt::LeftButton) {
-// 	setXRotation(xRot + 8 * dy);
-// 	setYRotation(yRot + 8 * dx);
-//     } else if (event->buttons() & Qt::RightButton) {
-// 	setXRotation(xRot + 8 * dy);
-// 	setZRotation(zRot + 8 * dx);
-//     }
+    rot.eulerZXZ(0,theta0,-phi0);
     
 }
 
