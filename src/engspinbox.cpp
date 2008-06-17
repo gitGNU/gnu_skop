@@ -25,6 +25,7 @@
 #include <iostream>
 #include "engspinbox.h"
 #include "engspinbox.moc"
+#include <cmath>
 
 EngSpinBox::EngSpinBox(QWidget *parent)
   : QDoubleSpinBox(parent),fP(0),rate(2.0)
@@ -50,14 +51,12 @@ QValidator::State EngSpinBox::validate ( QString & input, int & pos ) const{
 
 void EngSpinBox::stepBy(int steps){
   if (steps == -1){
-    std::cout << fP + (value()-fP)/2.<<"\n";
     if(rate > 0)
-      setValue(fP + (value()-fP)/abs(rate));
-    else setValue(fP + (value()-fP)*abs(rate));
+      setValue(fP + (value()-fP)/fabs(rate));
+    else setValue(fP + (value()-fP)*fabs(rate));
   }else{
-    std::cout << fP + (value()-fP)*2.<<"\n";
     if(rate > 0)
-      setValue(fP + (value()-fP)*abs(rate));
-    else setValue(fP + (value()-fP)/abs(rate));
+      setValue(fP + (value()-fP)*fabs(rate));
+    else setValue(fP + (value()-fP)/fabs(rate));
   }
 }

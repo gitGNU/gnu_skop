@@ -1,4 +1,4 @@
-// Copyright 2007 Marc Betoule
+// Copyright (C) 2007, 2008 Marc Betoule
 
 // This file is part of SkOP.
 
@@ -27,8 +27,10 @@
 #include "histodock.moc"
 #include "sphericalfield.h"
 #include "maplistmodel.h"
-HistoDock::HistoDock()
+HistoDock::HistoDock(QWidget *parent,MapListModel * mapList)
+   :QWidget(parent)
 {
+  model=mapList;
     createControls();
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(extremumGroup);
@@ -42,68 +44,51 @@ void HistoDock::createControls()
     minimumLabel = new QLabel(tr("Minimum value:"));
     maximumLabel = new QLabel(tr("Maximum value:"));
     
-    minimumSpinBox = new QSpinBox;
-    maximumSpinBox = new QSpinBox;
-    minimumSpinBox->setRange(0, 100);
-    maximumSpinBox->setRange(0, 100);
-    minimumSpinBox->setSingleStep(1);
-    maximumSpinBox->setSingleStep(1);
-    minimumSpinBox->setSuffix(tr("%"));
-    maximumSpinBox->setSuffix(tr("%"));
-    minimumSlider = new QSlider(Qt::Horizontal);
-    maximumSlider = new QSlider(Qt::Horizontal);
-    minimumSlider->setMinimum(0);
-    minimumSlider->setMaximum(100);
-    maximumSlider->setMinimum(0);
-    maximumSlider->setMaximum(100);
-    
+    minimumSpinBox = new EngSpinBox;
+    maximumSpinBox = new EngSpinBox;
+    minimumSpinBox->setRate(-1.1);
+    maximumSpinBox->setRate(1.1);
+        
     QGridLayout *extremumLayout = new QGridLayout;
     
-    extremumLayout->addWidget(minimumLabel, 0, 0);
-    extremumLayout->addWidget(minimumSpinBox, 0, 1);
-    extremumLayout->addWidget(minimumSlider, 1, 0,1,2);
-    extremumLayout->addWidget(maximumLabel, 2, 0);
-    extremumLayout->addWidget(maximumSpinBox, 2, 1);
-    extremumLayout->addWidget(maximumSlider, 3, 0,1,2);
+    extremumLayout->addWidget(maximumLabel, 0, 0);
+    extremumLayout->addWidget(maximumSpinBox, 0, 1);
+    extremumLayout->addWidget(minimumLabel, 1, 0);
+    extremumLayout->addWidget(minimumSpinBox, 1, 1);
+    
     extremumGroup->setLayout(extremumLayout);
     
-    connect(minimumSlider, SIGNAL(valueChanged(int)),
-	    this, SLOT(setMinBound(int)));
-    connect(maximumSlider, SIGNAL(valueChanged(int)),
-	    this, SLOT(setMaxBound(int)));
-    connect(minimumSpinBox, SIGNAL(valueChanged(int)),
-	    minimumSlider, SLOT(setValue(int)));
-    connect(maximumSpinBox, SIGNAL(valueChanged(int)),
-	    maximumSlider, SLOT(setValue(int)));
-    connect(minimumSlider, SIGNAL(valueChanged(int)),
-	    minimumSpinBox, SLOT(setValue(int)));
-    connect(maximumSlider, SIGNAL(valueChanged(int)),
-	    maximumSpinBox, SLOT(setValue(int)));
+    connect(minimumSpinBox, SIGNAL(valueChanged(double)),
+	    maximumSpinBox, SLOT(setFocalPoint(double)));
+    connect(maximumSpinBox, SIGNAL(valueChanged(double)),
+	    minimumSpinBox, SLOT(setFocalPoint(double)));
+    connect(maximumSpinBox, SIGNAL(valueChanged(double)),
+	    this, SLOT(setMaxBound(double)));
+    connect(minimumSpinBox, SIGNAL(valueChanged(double)),
+	    this, SLOT(setMinBound(double)));
 }
 
-void HistoDock::setMinBound(int newMin)
+void HistoDock::setMinBound(double newMin)
 {
-    //if(newMin < newMax){
-	currentMin = absMin + newMin * (absMax - absMin) /100.;
-	emit(boundChanged(currentMin, currentMax));
-	//}
+  currentMin = newMin;
+  emit(boundChanged(currentMin, currentMax));
 }
 
-void HistoDock::setMaxBound(int newMax)
+void HistoDock::setMaxBound(double newMax)
 {
-    //if(newMax > newMin){
-	currentMax = absMin + newMax * (absMax -absMin) / 100.;
-	emit(boundChanged(currentMin, currentMax));
-	//}
-    
+  currentMax = newMax;
+  emit(boundChanged(currentMin, currentMax));
 }
 
 void HistoDock::selectMap(const QModelIndex &current, const QModelIndex &previous)
 {
-    SphericalField * val = current.data(Qt::UserRole).value<SphericalField *>();
-    absMin = val->getMin();
-    absMax = val->getMax();
-    setMinBound(0);
-    setMaxBound(100);
+  model->setData(previous,QVariant(currentMin),MinScaleRole);
+  model->setData(previous,QVariant(currentMax),MaxScaleRole);
+  
+  minimumSpinBox->setRange(current.data(MinValRole).toDouble(), current.data(MaxValRole).toDouble());
+  maximumSpinBox->setRange(current.data(MinValRole).toDouble(), current.data(MaxValRole).toDouble());
+  
+  minimumSpinBox->setValue(current.data(MinScaleRole).toDouble());
+  maximumSpinBox->setValue(current.data(MaxScaleRole).toDouble());
     
 }

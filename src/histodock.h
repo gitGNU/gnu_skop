@@ -1,4 +1,4 @@
-// Copyright 2007 Marc Betoule
+// Copyright (C) 2007, 2008 Marc Betoule
 
 // This file is part of SkOP.
 
@@ -26,13 +26,15 @@
 #define HISTODOCK_H
 
 #include <QtGui>
+#include "engspinbox.h"
 
+class MapListModel;
 
 class HistoDock : public QWidget{
     Q_OBJECT
 public slots:
-    void setMinBound(int newMin);
-    void setMaxBound(int newMax);
+    void setMinBound(double newMin);
+    void setMaxBound(double newMax);
     void selectMap(const QModelIndex &current, const QModelIndex &previous);
 signals:
     void minChanged(double newMin);
@@ -40,7 +42,7 @@ signals:
     void boundChanged(double newMin, double newMax);
     
 public:
-    HistoDock();
+  HistoDock(QWidget *parent = 0,MapListModel * mapList = 0);
     
 private:
     void createControls();
@@ -48,12 +50,11 @@ private:
     QGroupBox *extremumGroup;
     
     QLabel *minimumLabel;
-    QSpinBox *minimumSpinBox;
-    QSlider *minimumSlider;
-    
+    EngSpinBox *minimumSpinBox;
+        
     QLabel *maximumLabel;
-    QSpinBox *maximumSpinBox;
-    QSlider *maximumSlider;
+    EngSpinBox *maximumSpinBox;
+    
 
     double currentMin;
     double currentMax;
@@ -61,7 +62,7 @@ private:
     double absMin;
     double absMax;
     
-    
+    MapListModel * model;
 };
 
 #endif

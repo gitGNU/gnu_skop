@@ -4,6 +4,8 @@ SET(healpix_SRCS
   )
 
 SET(SkOP_SRCS
+  ${SkOP_SOURCE_DIR}/src/engspinbox.h
+  ${SkOP_SOURCE_DIR}/src/engspinbox.cpp
   ${SkOP_SOURCE_DIR}/src/histodock.h
   ${SkOP_SOURCE_DIR}/src/histodock.cpp
   ${SkOP_SOURCE_DIR}/src/maplistmodel.h

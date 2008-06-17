@@ -127,7 +127,7 @@ void Skop::createDockWindows()
 
      dock = new QDockWidget(tr("Histogram"), this);
      dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-     HistoDock *hd = new HistoDock;
+     HistoDock *hd = new HistoDock(dock,mapList);
      dock->setWidget(hd);
      addDockWidget(Qt::RightDockWidgetArea, dock);
      connect(hd, SIGNAL(boundChanged(double , double)),

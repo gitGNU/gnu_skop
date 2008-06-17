@@ -1,4 +1,4 @@
-// Copyright 2007-2008 Marc Betoule
+// Copyright (C) 2007, 2008 Marc Betoule
 
 // This file is part of SkOP.
 

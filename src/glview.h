@@ -35,9 +35,11 @@ class GLView : public QGLWidget
     Q_OBJECT
     
 public:
-    GLView(QWidget *parent = 0);
-    ~GLView();
-
+  GLView(QWidget *parent = 0);
+  ~GLView();
+  void pixel2sky();
+  void sky2pixel();
+		  
 public slots:
     void updateShader(const QModelIndex & current);
     void updateScale(double minBound, double maxBound);

@@ -62,6 +62,18 @@ QVariant MapInfo::get(int role) const
   if (role == NsideRole){
     return QVariant(pointer->getNPix());
   }
+  if (role == MinValRole){
+    return QVariant(minValue);
+  }
+  if (role == MaxValRole){
+    return QVariant(maxValue);
+  }
+  if (role == MinScaleRole){
+    return QVariant(minScale);
+  }
+  if (role == MaxScaleRole){
+    return QVariant(maxScale);
+  }
   else
     return QVariant();    
 }
@@ -70,12 +82,27 @@ bool MapInfo::edit(const QVariant &value, int role)
 {
   if (role == Qt::EditRole) {
     name = value.toString().toStdString();
+    return true;
   }
   if (role == PointerRole){
     pointer = value.value<SphericalField *>();
+    if(pointer != 0){
+      minValue = minScale = pointer->getMin();
+      maxValue = maxScale = pointer->getMax();
+      cout << minValue << "," << maxValue << endl;
+    }
     cout << "Now pointing at : "<< pointer << endl;
     return true;
   }
+  if (role == MinScaleRole){
+    minScale = value.toDouble();
+    return true;
+  }
+  if (role == MaxScaleRole){
+    maxScale = value.toDouble();
+    return true;
+  }
+  else return false;
 }
 
 int MapListModel::rowCount(const QModelIndex &parent) const
@@ -118,6 +145,9 @@ bool MapListModel::setData(const QModelIndex &index,
       if(mapList[index.row()].edit(value, role)){
 	emit dataChanged(index, index);
 	return true;
+      }
+      else{
+	return false;
       }
     }
     return false;    
