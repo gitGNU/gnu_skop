@@ -25,6 +25,9 @@
 #ifndef TOOLBOX_H
 #define TOOLBOX_H
 #include <cmath>
+#include <iostream>
+
+using namespace std;
 
 class Vec3{
  public:
@@ -56,7 +59,7 @@ class Vec3{
   }
   void ang(double & theta, double & phi){
     theta = acos(a[2]/norm());
-    phi = atan2(a[0],a[1]);
+    phi = atan2(a[1],a[0]);
   }
   double a[3];
 };
@@ -107,7 +110,10 @@ class Mat3{
   }
 
   void eulerZXZ(double alpha, double beta, double gamma);
+  void eulerZYZ(double alpha, double beta, double gamma);
   double a[3][3];
 };
 
+ostream & operator << (ostream &os,  Mat3 & m);
+ostream & operator << (ostream &os,  Vec3 & v);
 #endif

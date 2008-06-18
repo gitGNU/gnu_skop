@@ -47,6 +47,8 @@ void PixelDock::createControls()
     phiLabelVal= new QLabel();
     lonVal= new QLabel();
     latVal= new QLabel();
+    pixelValue= new QLabel(tr("T(N/S):"));
+    pixelValueVal = new QLabel();
     QGridLayout *pixelLayout = new QGridLayout;
     pixelLayout->addWidget(thetaLabel, 0, 0);
     pixelLayout->addWidget(thetaLabelVal, 0, 1);
@@ -56,6 +58,8 @@ void PixelDock::createControls()
     pixelLayout->addWidget(lonVal, 1, 1);
     pixelLayout->addWidget(lat, 1, 2);
     pixelLayout->addWidget(latVal, 1, 3);
+    pixelLayout->addWidget(pixelValue, 2, 0);
+    pixelLayout->addWidget(pixelValueVal, 2, 1);
     selectedPixelGroup->setLayout(pixelLayout);
     
     generalGroup = new QGroupBox("General info");
@@ -76,6 +80,7 @@ void PixelDock::update(){
   phiLabelVal->setNum(phi);
   lonVal->setNum(phi*180/M_PI);
   latVal->setNum(90-(theta*180/M_PI));
+  pixelValueVal->setNum(map.data(PointerRole).value<SphericalField *>()->getValue(theta,phi));
   nsideVal->setNum(map.data(NsideRole).toInt());
 }
 

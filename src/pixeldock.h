@@ -49,8 +49,9 @@ private:
   QLabel *phiLabelVal;
   QLabel *lonVal;
   QLabel *latVal;
-  QLabel *value;
-  
+  QLabel *pixelValue;
+  QLabel *pixelValueVal;
+
   QGroupBox *generalGroup;
   QLabel *nside;
   QLabel *nsideVal;

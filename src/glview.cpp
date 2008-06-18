@@ -60,7 +60,8 @@ void GLView::initializeGL()
     GlslContext::initGLExtensions();
  
     string vert = "void main()\n{\ngl_TexCoord[0] = gl_MultiTexCoord0;\n  gl_Position = ftransform();\n}";
-    string black = "void main(){gl_FragColor=vec4(0.0,0,0,1.0);}";
+    //string black = "void main(){gl_FragColor=vec4(0.0,0,0,1.0);}";
+    string black = "void main(){gl_FragColor=vec4(gl_TexCoord[0]);}";
     //p = new Program("ang2pix.vert", "black.frag");
     p = new Program(vert, black);
     cout << p->getLinkerLog();
@@ -103,12 +104,18 @@ void GLView::wheelEvent ( QWheelEvent * e ){
 
 bool GLView::pixel2sky(int x, int y, double & theta, double & phi){
   double u = (2. * x / width()  - 1.) * dist;
-  double v = (2. * y / height() - 1.) * dist;
+  double v = -(2. * y / height() - 1.) * dist;
+  cout << u << "," << v << endl;
   if( u*u+v*v <= 1){
     theta = acos(v);
-    phi = acos(u/sin(theta));
+    phi = asin(u/sin(theta));
+    cout << theta << "," << phi << endl;
+    cout << theta0 << "," << phi0 << endl;
     Vec3 coord(theta,phi);
+    cout << coord;
+    cout << rot;
     coord = rot * coord;
+    cout << coord;
     coord.ang(theta,phi);
     return true;
   }
@@ -123,7 +130,6 @@ void GLView::mousePressEvent(QMouseEvent *event)
       double theta, phi;
       pixel2sky(event->x(), event->y(), theta, phi);
       emit pixelSelected(theta, phi);
-      cout << theta<< "," << phi << endl;
     }
     
 }
@@ -137,8 +143,8 @@ void GLView::mouseMoveEvent(QMouseEvent *event)
 	phi0 += dx * dist / height ();
 	lastPos = event->pos();
 	update();
+	rot.eulerZYZ(0,theta0,phi0);
     }
-    rot.eulerZXZ(0,theta0,-phi0);
     
 }
 
