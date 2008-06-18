@@ -1,4 +1,4 @@
-// Copyright 2007 Marc Betoule
+// Copyright (C) 2007, 2008 Marc Betoule
 
 // This file is part of SkOP.
 
@@ -26,26 +26,30 @@
 #include "maplistmodel.h"
 #include "maplistmodel.moc"
 #include "sphericalfield.h"
+#include "toolbox.h"
 #include <QImage>
 #include <cmath> 
+
 QVariant MapInfo::get(int role) const
 {
   if (role == Qt::DisplayRole){
     return QString::fromStdString(name);
   }
   if (role == Qt::DecorationRole){
-    QImage im(32,32,QImage::Format_ARGB32);
-    for(int i = 0; i<32 ; i++){
-      for(int j = 0; j<32 ; j++){
+    int imsize = 64;
+    QImage im(imsize,imsize,QImage::Format_ARGB32);
+    for(int i = 0; i<imsize ; i++){
+      for(int j = 0; j<imsize ; j++){
 	double u,v;
-	u = (i-16)/16.0;
-	v = (j-16)/16.0;
+	u = (i-imsize*0.5)/(imsize * .5);
+	v = (j-imsize*0.5)/(imsize * .5);
 	if (u*u+v*v >=1)
 	  im.setPixel(i,j,qRgba ( 0, 0, 0, 0 ));
 	else{
-	  float pixelval = pointer->getValue(acos(v),  acos(u/sin(acos(v))));
-	  float rescaled = (pixelval - minValue)/(maxValue-minValue);
-	  im.setPixel(i,j,qRgba ( 255*rescaled, 255*rescaled, 255*rescaled, 255 ));
+	  float pixelval = pointer->getValue(acos(v),  asin(u/sin(acos(v))));
+	  float rescaled = log(1+pixelval - minValue)/log(1+maxValue-minValue);
+	  im.setPixel(i,j,jet(rescaled, 255 ));
+	  //im.setPixel(i,j,qRgba(rescaled*255, rescaled*255,rescaled*255,255 ));
 	}
       }
       

@@ -51,3 +51,14 @@ ostream & operator << (ostream &os, Vec3 & v){
      << "(" << v[2] << "\t)\n";
   return os;
 }
+
+QRgb jet(double f, int alpha){
+  Vec3 cv[6] = {Vec3(0,0,0.5),Vec3(0,0,1), Vec3(0,1,1), Vec3(1,1,0), Vec3(1,0.33,0), Vec3(0.5,0,0)};
+  float fv[6] = {0,0.15,0.4,0.7,0.9,1};
+  if (f<=fv[0]) return qRgba(cv[0][0]*255, cv[0][1]*255,cv[0][2]*255,alpha);
+  if (f>=fv[5]) return qRgba(cv[5][0]*255, cv[5][1]*255,cv[5][2]*255,alpha);
+  int i=0;
+  while (f>fv[i]) ++i;
+  Vec3 col = cv[i-1]*((fv[i]-f)/(fv[i]-fv[i-1])) + cv[i]*((f-fv[i-1])/(fv[i]-fv[i-1]));
+  return qRgba(col[0]*255, col[1]*255,col[2]*255,alpha);
+}

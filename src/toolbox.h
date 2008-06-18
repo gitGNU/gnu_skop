@@ -26,12 +26,12 @@
 #define TOOLBOX_H
 #include <cmath>
 #include <iostream>
-
+#include <QColor>
 using namespace std;
 
 class Vec3{
  public:
-  Vec3(){}
+  Vec3(){a[0] = a[1] = a[2] = 0;}
   Vec3(double theta, double phi){
     double c = sin(theta);
     a[0] = c * cos(phi);
@@ -52,6 +52,19 @@ class Vec3{
     double c;
     for(int i = 0 ; i < 3 ; i++)
 	c+=a[i]*b[i];
+    return c;
+  }
+
+  Vec3 operator + (Vec3 b){
+    Vec3 c;
+    for(int i = 0 ; i < 3 ; i++)
+	c[i] = a[i]+b[i];
+    return c;
+  }
+  Vec3 operator - (Vec3 b){
+    Vec3 c;
+    for(int i = 0 ; i < 3 ; i++)
+	c[i] = a[i]-b[i];
     return c;
   }
   double norm(){
@@ -116,4 +129,7 @@ class Mat3{
 
 ostream & operator << (ostream &os,  Mat3 & m);
 ostream & operator << (ostream &os,  Vec3 & v);
+
+QRgb jet(double value, int alpha = 255);
+
 #endif

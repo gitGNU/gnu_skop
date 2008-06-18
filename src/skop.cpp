@@ -67,7 +67,7 @@ void Skop::openMap()
 	QVariant v;
 	v.setValue(hmap);
 	mapList->setData(inserted, v,Qt::UserRole);
-	mapList->setData(inserted,QString(hmap->name().c_str()));
+	mapList->setData(inserted,QFileInfo(QString(hmap->name().c_str())).baseName());
 	mapList->setData(inserted,hmap->getMin(), MinValRole);
 	mapList->setData(inserted,hmap->getMax(), MaxValRole);
 	//new QListWidgetItem(tr("file %1").arg(fn), mapList);
