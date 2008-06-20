@@ -118,13 +118,20 @@ SphericalField * SphericalField::readFits(string filename){
   
   ffcmps("HEALPIX", pixtype, FALSE, &match, &exact);
   if(!match){
-    cout << "No valid pixelisation keyword found\n";
+    cout << "No valid pixelisation keyword found, defaulting to HEALPIX\n";
+    field = new HealpixField();
+    field->read(&fptr);
+    field->setName(filename);
   }
   else{
     field = new HealpixField();
     field->read(&fptr);
     field->setName(filename);
   }
+
+  status = 0;
+  ffgky(fptr, TSTRING, "TUNIT1", pixtype, NULL, &status);
+  field->unit = pixtype;
   status = 0;
   fits_close_file(fptr, &status);
   return field;

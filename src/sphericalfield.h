@@ -55,6 +55,9 @@ public:
     string getShader(){
 	return shader;
     }
+    string getUnit(){
+      return unit;
+    }
     double getMin(){
 	return minV;
     }
@@ -89,6 +92,7 @@ protected:
     float * data;
     int npix;
     string shader;
+    string unit;
     float minV;
     float maxV;
     //GLSLProg prog;

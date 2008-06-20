@@ -35,7 +35,7 @@
 #include "sphericalfield.h"
 Q_DECLARE_METATYPE(SphericalField *)
 
-enum Roles {PointerRole = Qt::UserRole, MinValRole, MaxValRole, MinScaleRole,MaxScaleRole,ThetaRole,PhiRole,ShaderRole,NsideRole};
+enum Roles {PointerRole = Qt::UserRole, MinValRole, MaxValRole, MinScaleRole,MaxScaleRole,ThetaRole,PhiRole,ShaderRole,NsideRole,UnitRole};
 
 class MapInfo
 {

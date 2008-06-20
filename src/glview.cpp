@@ -60,8 +60,8 @@ void GLView::initializeGL()
     GlslContext::initGLExtensions();
  
     string vert = "void main()\n{\ngl_TexCoord[0] = gl_MultiTexCoord0;\n  gl_Position = ftransform();\n}";
-    //string black = "void main(){gl_FragColor=vec4(0.0,0,0,1.0);}";
-    string black = "void main(){gl_FragColor=vec4(gl_TexCoord[0]);}";
+    string black = "void main(){gl_FragColor=vec4(0.0,0,0,1.0);}";
+    //string black = "void main(){gl_FragColor=vec4(gl_TexCoord[0]);}";
     //p = new Program("ang2pix.vert", "black.frag");
     p = new Program(vert, black);
     cout << p->getLinkerLog();

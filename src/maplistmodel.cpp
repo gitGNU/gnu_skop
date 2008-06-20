@@ -79,6 +79,9 @@ QVariant MapInfo::get(int role) const
   if (role == MaxScaleRole){
     return QVariant(maxScale);
   }
+  if (role == UnitRole){
+    return QString::fromStdString(pointer->getUnit());
+  }
   else
     return QVariant();    
 }

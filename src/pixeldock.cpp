@@ -82,6 +82,7 @@ void PixelDock::update(){
   latVal->setNum(90-(theta*180/M_PI));
   pixelValueVal->setNum(map.data(PointerRole).value<SphericalField *>()->getValue(theta,phi));
   nsideVal->setNum(map.data(NsideRole).toInt());
+  pixelValue->setText(tr("T(%1):").arg(map.data(UnitRole).toString()));
 }
 
 void PixelDock::selectPixel(double theta0, double phi0){

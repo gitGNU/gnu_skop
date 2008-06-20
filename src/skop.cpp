@@ -160,7 +160,9 @@ void Skop::about()
  {
     QMessageBox::about(this, tr("About Skop"),
              tr("The <b>Sky Orthographic Projector</b> is a powerfull tool "
-                "to visualize pixelized data on the sphere."));
+                "to visualize pixelized data on the sphere.\n\n"
+		"(c) 2007, 2008 Marc Betoule\n\n"
+		"This software is distributed under the term of GPL v3."));
  }
 
 void Skop::createActions()
