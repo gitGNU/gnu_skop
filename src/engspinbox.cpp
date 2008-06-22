@@ -30,6 +30,7 @@
 EngSpinBox::EngSpinBox(QWidget *parent)
   : QDoubleSpinBox(parent),fP(0),rate(2.0)
 {
+  setDecimals(15);
 }
 
 double EngSpinBox::valueFromText(const QString &text) const{
