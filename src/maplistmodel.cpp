@@ -46,7 +46,7 @@ QVariant MapInfo::get(int role) const
 	if (u*u+v*v >=1)
 	  im.setPixel(i,j,qRgba ( 0, 0, 0, 0 ));
 	else{
-	  float pixelval = pointer->getValue(acos(v),  asin(u/sin(acos(v))));
+	  float pixelval = pointer[0]->getValue(acos(v),  asin(u/sin(acos(v))));
 	  float rescaled = log(1+pixelval - minValue)/log(1+maxValue-minValue);
 	  im.setPixel(i,j,jet(rescaled, 255 ));
 	  //im.setPixel(i,j,qRgba(rescaled*255, rescaled*255,rescaled*255,255 ));
