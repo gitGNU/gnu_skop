@@ -35,7 +35,7 @@
 #include "sphericalfield.h"
 Q_DECLARE_METATYPE(SphericalField *)
 
-enum Roles {PointerRole = Qt::UserRole, MinValRole, MaxValRole, MinScaleRole,MaxScaleRole,ThetaRole,PhiRole,ShaderRole,NsideRole,UnitRole, NFieldRole,FieldsNameRole};
+enum Roles {PointerRole = Qt::UserRole, MinValRole, MaxValRole, MinScaleRole,MaxScaleRole,ThetaRole,PhiRole,ShaderRole,NsideRole,UnitRole};
 
 class MapInfo
 {
@@ -44,19 +44,14 @@ public:
   bool edit(const QVariant &value, int role);
   QVariant get(int role) const;
   
-  float minValue[];
-  float maxValue[];
-  float minScale[];
-  float maxScale[];
+  float minValue;
+  float maxValue;
+  float minScale;
+  float maxScale;
   string name;
   double theta;
   double phi;
-  SphericalField ** pointer;
-  int activeField;
-  int nFields;
-  QString fieldNames[];
-  QString units[];
-
+  SphericalField * pointer;
 };
 
 class MapListModel : public QAbstractListModel
