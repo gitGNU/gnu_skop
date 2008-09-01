@@ -49,6 +49,7 @@ private slots:
     void openMap();
     void selectMap(const QModelIndex &current, const QModelIndex &previous);
     void about();
+    void captureScreen();
 
 
 private:
@@ -77,6 +78,7 @@ private:
     QAction *aboutAct;
     QAction *aboutQtAct;
     QAction *quitAct;
+    QAction *capture;
 };
 
 #endif

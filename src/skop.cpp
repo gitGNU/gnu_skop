@@ -75,6 +75,19 @@ void Skop::openMap()
     
 }
 
+void Skop::captureScreen()
+{
+    QString fn = QFileDialog::getSaveFileName(this, 
+					      tr("Save screenshot to"),"~/untitled.png",tr("Images (*.png *.xpm *.jpg)"));
+    
+    if ( !fn.isEmpty() ){
+	statusBar()->showMessage( tr("Saving to %1").arg(fn));
+	glview->grabFrameBuffer().save(fn);
+    }
+    
+}
+
+
 void Skop::selectMap(const QModelIndex &current,
 		     const QModelIndex &previous)
 {
@@ -171,6 +184,11 @@ void Skop::createActions()
      openMapAct->setShortcut(tr("Ctrl+N"));
      openMapAct->setStatusTip(tr("Load a map from a fits file"));
      connect(openMapAct, SIGNAL(triggered()), this, SLOT(openMap()));
+     
+     capture = new QAction(tr("&capture"),this);
+     capture->setShortcut(QKeySequence::Copy);
+     capture->setStatusTip(tr("Capture the screen and save to a file"));
+     connect(capture, SIGNAL(triggered()), this, SLOT(captureScreen()));
 
      quitAct = new QAction(tr("&Quit"), this);
      quitAct->setShortcut(tr("Ctrl+Q"));
@@ -206,6 +224,7 @@ void Skop::createToolBars()
  {
      fileToolBar = addToolBar(tr("File"));
      fileToolBar->addAction(openMapAct);
+     fileToolBar->addAction(capture);
 
  }
 
