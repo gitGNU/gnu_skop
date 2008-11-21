@@ -134,7 +134,7 @@ void main(){
       yf = yf * nside + iy;
       vec2 ij = vec2(xf,yf);
       
-      float valvec = texture2D(tex2, ij/(2*nsidef)).x;
+      float valvec = texture2D(tex2, ij/(2*nsidef));
       gl_FragColor = jet(valvec);
     }
     else{
@@ -145,7 +145,7 @@ void main(){
       yf = yf * nside + iy;
       vec2 ij = vec2(xf,yf);
       
-      float valvec = texture2D(tex3, ij/(2*nsidef)).x;
+      float valvec = texture2D(tex3, ij/(2*nsidef));
       gl_FragColor = jet(valvec);
     }
   }
