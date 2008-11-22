@@ -4,6 +4,10 @@ SET(healpix_SRCS
   )
 
 SET(SkOP_SRCS
+  ${SkOP_SOURCE_DIR}/src/pages.h
+  ${SkOP_SOURCE_DIR}/src/pages.cpp
+  ${SkOP_SOURCE_DIR}/src/preferencedialog.h
+  ${SkOP_SOURCE_DIR}/src/preferencedialog.cpp
   ${SkOP_SOURCE_DIR}/src/pixeldock.h
   ${SkOP_SOURCE_DIR}/src/pixeldock.cpp
   ${SkOP_SOURCE_DIR}/src/toolbox.h

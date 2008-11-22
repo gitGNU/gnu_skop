@@ -30,7 +30,7 @@
 #include "sphericalfield.h"
 #include "histodock.h"
 #include "pixeldock.h"
-
+#include "preferencedialog.h"
 //#include "healpixfield.h"
 #include <QFileDialog>
 
@@ -73,6 +73,12 @@ void Skop::openMap()
 	//new QListWidgetItem(tr("file %1").arg(fn), mapList);
     }
     
+}
+
+void Skop::setConfig()
+{
+  PreferenceDialog dialog(this);
+  dialog.exec();
 }
 
 void Skop::captureScreen()
@@ -181,7 +187,7 @@ void Skop::about()
 void Skop::createActions()
  {
      openMapAct = new QAction(tr("&Open"),this);
-     openMapAct->setShortcut(tr("Ctrl+N"));
+     openMapAct->setShortcut(QKeySequence::Open);
      openMapAct->setStatusTip(tr("Load a map from a fits file"));
      connect(openMapAct, SIGNAL(triggered()), this, SLOT(openMap()));
      
@@ -190,6 +196,11 @@ void Skop::createActions()
      capture->setStatusTip(tr("Capture the screen and save to a file"));
      connect(capture, SIGNAL(triggered()), this, SLOT(captureScreen()));
 
+     setupAct = new  QAction(tr("&Settings"),this);
+     openMapAct->setShortcut(tr("Ctrl+P"));
+     openMapAct->setStatusTip(tr("Change user settings"));
+     connect(setupAct, SIGNAL(triggered()), this, SLOT(setConfig()));
+     
      quitAct = new QAction(tr("&Quit"), this);
      quitAct->setShortcut(tr("Ctrl+Q"));
      quitAct->setStatusTip(tr("Quit the application"));
@@ -208,8 +219,10 @@ void Skop::createMenus()
  {
      fileMenu = menuBar()->addMenu(tr("&File"));
      fileMenu->addAction(openMapAct);
+     fileMenu->addAction(setupAct);
      fileMenu->addSeparator();
      fileMenu->addAction(quitAct);
+     
 
      viewMenu = menuBar()->addMenu(tr("&View"));
 

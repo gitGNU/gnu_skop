@@ -47,6 +47,7 @@ signals:
     
 private slots:
     void openMap();
+    void setConfig();
     void selectMap(const QModelIndex &current, const QModelIndex &previous);
     void about();
     void captureScreen();
@@ -76,6 +77,7 @@ private:
 
     QAction *openMapAct;
     QAction *aboutAct;
+    QAction *setupAct;
     QAction *aboutQtAct;
     QAction *quitAct;
     QAction *capture;
