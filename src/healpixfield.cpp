@@ -177,7 +177,7 @@ void HealpixField::ring2xyf (ind pix, ind &x, ind &y, ind &f) const
 
   int irt = iring - ((int)((2+(f>>2))*nside)) + 1;
   int ipt = 2*iphi- (((f & 3)<<1)+((~f & 4)>>2))*nr - kshift -1;
-  if (ipt>=nl2){cout<<"merde"; ipt-=8*nside;}
+  if (ipt>=nl2){ipt-=8*nside;}
 
   x =  (ipt-irt) >>1;
   y =(-(ipt+irt))>>1;
