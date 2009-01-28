@@ -64,7 +64,7 @@ void GLView::initializeGL()
     //string black = "void main(){gl_FragColor=vec4(gl_TexCoord[0]);}";
     //p = new Program("ang2pix.vert", "black.frag");
     p = new Program(vert, black);
-    cout << p->getLinkerLog();
+    cout << p->getLog();
 }
 
 void GLView::updateShader(const QModelIndex &current)

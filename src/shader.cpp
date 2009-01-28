@@ -174,6 +174,19 @@ Shader::Shader(const string code,GLenum sT){
   glShaderSource(shaderHandler, 1, &psource,NULL);
 
   glCompileShader(shaderHandler);
+  int infologLength = 0;
+  int charsWritten  = 0;
+  char *infoLog;
+  string info;
+
+  glGetShaderiv(shaderHandler, GL_INFO_LOG_LENGTH,&infologLength);
+  if (infologLength > 0){
+    infoLog = new char[infologLength];
+    glGetShaderInfoLog(shaderHandler, infologLength, &charsWritten, infoLog);
+    info = infoLog;
+    delete infoLog;
+  }
+  cout << info;
 }
 
 Shader::~Shader(){
@@ -245,6 +258,14 @@ string Program::getLinkerLog(){
     info = infoLog;
     delete infoLog;
   }
+  return info;
+}
+
+string Program::getLog(){
+  string intro = "Vertex Shader Log:\n";
+  string info = intro + vertexShader->getCompilerLog();
+  info = info + "Fragment Shader Log:\n" + fragmentShader->getCompilerLog();
+  info = info + "Linker Log:\n" + getLinkerLog();
   return info;
 }
 

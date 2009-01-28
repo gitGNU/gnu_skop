@@ -2,22 +2,22 @@ uniform sampler2D tex1,tex2,tex3;
 uniform int nside;
 uniform float dist, theta0, phi0, minv, maxv;
 const float pi = 3.141592653589793238462643383279502884197;
-const mat3 rot = mat3(cos(phi0)*cos(theta0), -sin(phi0)*cos(theta0), sin(theta0),
+mat3 rot = mat3(cos(phi0)*cos(theta0), -sin(phi0)*cos(theta0), sin(theta0),
 sin(phi0), cos(phi0), 0,
 		-sin(theta0)*cos(phi0),sin(theta0)*sin(phi0),cos(theta0));
-const float nsidef = float(nside);
-const float nsmax=8192.0;
-const vec3 col0 = vec3(0,0,0.5);
-const vec3 col1 = vec3(0,0,1);
-const vec3 col2 = vec3(0,1,1);
-const vec3 col3 = vec3(1,1,0);
-const vec3 col4 = vec3(1,0.33,0);
-const vec3 col5 = vec3(0.5,0,0);
-const float diff=maxv-minv;
-const float val1=0.15*diff+minv;
-const float val2=0.4*diff+minv;
-const float val3=0.7*diff+minv;
-const float val4=0.9*diff+minv;
+float nsidef = float(nside);
+float nsmax=8192.0;
+vec3 col0 = vec3(0,0,0.5);
+vec3 col1 = vec3(0,0,1);
+vec3 col2 = vec3(0,1,1);
+vec3 col3 = vec3(1,1,0);
+vec3 col4 = vec3(1,0.33,0);
+vec3 col5 = vec3(0.5,0,0);
+float diff=maxv-minv;
+float val1=0.15*diff+minv;
+float val2=0.4*diff+minv;
+float val3=0.7*diff+minv;
+float val4=0.9*diff+minv;
 //vec2 coord2thetaphi(vec2 coor){
   //vec2 thetaphi = vec2(acos(coor.y),asin(coor.x/sin(acos(coor.y))));
   //vec3 coord=vec3(cos(thetaphi.y)*sin(thetaphi.x),
@@ -99,10 +99,10 @@ void main(){
       
       jp = int(clamp(float(jp),0.0,nsmax-1.0));
       jm = int(clamp(float(jm),0.0,nsmax-1.0));
-      if(texco.y >=0){
+      if(texco.y >= 0.0){
 	face_num = int(tt);  //in {0,3}
-	ix = nsmax - jm - 1;
-	iy = nsmax - jp - 1;
+	ix = int(nsmax) - jm - 1;
+	iy = int(nsmax) - jp - 1;
       }
       else{
 	face_num = int(tt) + 8; // in {8,11}
@@ -110,20 +110,20 @@ void main(){
         iy =  jm;
       }
     }
-    ix = ix * nside / nsmax;
-    iy = iy * nside /nsmax;
+    ix = ix * nside / int(nsmax);
+    iy = iy * nside / int(nsmax);
     gl_FragColor=vec4(ix,iy,0,1.0);
     if(face_num < 4){
-      int itex = mod(float(face_num),4.0);
-      int xf = mod(float(itex),2.0);
+      int itex = int(mod(float(face_num),4.0));
+      int xf = int(mod(float(itex),2.0));
       xf = xf * nside + ix;
       int yf = int(itex/2);
       yf = yf * nside + iy;
       vec2 ij = vec2(xf,yf)/(2*nsidef);
       ij = vec2(0.5,0.5);
       
-      vec4 valvec = texture2D(tex1, ij.xy);
-      gl_FragColor = jet(valvec.x);
+      float valvec = texture2D(tex1, ij.xy).x;
+      gl_FragColor = jet(valvec);
       //gl_FragColor=valvec;
       //gl_FragColor=vec4(valvec.w, 0.0, 0.0,1.0);
 /*       gl_FragColor=vec4(ij.x / (2.0*nside),ij.y / (2.0*nside),0,1.0); */

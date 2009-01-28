@@ -73,6 +73,7 @@ public :
   Program(Shader * vShader, Shader * fShader);
   ~Program();
   string getLinkerLog();
+  string getLog();
   GLint getLoc(const char* name);
   void set1i(const char * name, GLint val);
   void set1f(const char * name, GLfloat val);
