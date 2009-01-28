@@ -50,7 +50,7 @@ void SphericalField::load(){
 void SphericalField::bind(){
   if(bound) return;
   load();
-  int internalformat = GL_LUMINANCE32F_ARB;//GL_LUMINANCE32F_ARB;
+  int internalformat = GL_LUMINANCE16;//GL_LUMINANCE32F_ARB;//GL_LUMINANCE32F_ARB;
   for(int i = 0; i<3; i++){
       int hsize = sqrt(npix/3);
       glActiveTexture(GL_TEXTURE0 +i );
@@ -66,7 +66,7 @@ void SphericalField::bind(){
       */
       glTexImage2D(GL_TEXTURE_2D, 0, internalformat, hsize, hsize, 0,
 		   GL_LUMINANCE, GL_FLOAT, data+(i*hsize*hsize) );
-      cout << "textureid : "<<textureId[i] << "\n";
+      cout << "textureid : "<<textureId[i] << "\t data:" << data[i*hsize*hsize] <<"\n";
   }
   cout << "textype :" << internalformat << endl;
   
