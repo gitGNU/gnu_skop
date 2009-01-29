@@ -120,7 +120,6 @@ void main(){
       int yf = int(itex/2);
       yf = yf * nside + iy;
       vec2 ij = vec2(xf,yf)/(2*nsidef);
-      ij = vec2(0.5,0.5);
       
       float valvec = texture2D(tex1, ij.xy).x;
       gl_FragColor = jet(valvec);
@@ -129,28 +128,28 @@ void main(){
 /*       gl_FragColor=vec4(ij.x / (2.0*nside),ij.y / (2.0*nside),0,1.0); */
     }
     
-/*     else if(face_num < 8){ */
-/*       int itex = mod(float(face_num),4.0); */
-/*       int xf = mod(float(itex),2.0); */
-/*       xf = xf * nside + ix; */
-/*       int yf = int(itex/2); */
-/*       yf = yf * nside + iy; */
-/*       vec2 ij = vec2(xf,yf); */
+    else if(face_num < 8){
+      int itex = int(mod(float(face_num),4.0));
+      int xf = int(mod(float(itex),2.0));
+      xf = xf * nside + ix;
+      int yf = int(itex/2);
+      yf = yf * nside + iy;
+      vec2 ij = vec2(xf,yf);
       
-/*       float valvec = texture2D(tex2, ij/(2*nsidef)); */
-/*       gl_FragColor = jet(valvec); */
-/*     } */
-/*     else{ */
-/*       int itex = mod(float(face_num),4.0); */
-/*      int xf = mod(float(itex),2.0); */
-/*       xf = xf * nside + ix; */
-/*       int yf = int(itex/2); */
-/*       yf = yf * nside + iy; */
-/*       vec2 ij = vec2(xf,yf); */
+      float valvec = texture2D(tex2, ij/(2*nsidef)).x;
+      gl_FragColor = jet(valvec);
+    }
+    else{
+      int itex = int(mod(float(face_num),4.0));
+      int xf = int(mod(float(itex),2.0));
+      xf = xf * nside + ix;
+      int yf = int(itex/2);
+      yf = yf * nside + iy;
+      vec2 ij = vec2(xf,yf);
       
-/*       float valvec = texture2D(tex3, ij/(2*nsidef)); */
-/*       gl_FragColor = jet(valvec); */
-/*     } */
+      float valvec = texture2D(tex3, ij/(2*nsidef)).x;
+      gl_FragColor = jet(valvec);
+    }
   }
   else{
    gl_FragColor=vec4(0.0,0,0,1.0);

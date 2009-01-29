@@ -50,7 +50,7 @@ void SphericalField::load(){
 void SphericalField::bind(){
   if(bound) return;
   load();
-  int internalformat = GL_LUMINANCE16;//GL_LUMINANCE32F_ARB;//GL_LUMINANCE32F_ARB;
+  int internalformat = GL_LUMINANCE32F_ARB;//GL_LUMINANCE32F_ARB;
   for(int i = 0; i<3; i++){
       int hsize = sqrt(npix/3);
       glActiveTexture(GL_TEXTURE0 +i );
