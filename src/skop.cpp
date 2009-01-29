@@ -51,7 +51,7 @@ Skop::Skop()
      createDockWindows();
      
      setWindowTitle(tr("Sky Orthographic Projector"));
-
+     setAcceptDrops(true);
      //newLetter();
  }
 
@@ -233,3 +233,48 @@ void Skop::createStatusBar()
      statusBar()->showMessage(tr("Ready"));
  }
 
+void Skop::dragEnterEvent(QDragEnterEvent *event)
+{
+  const QMimeData *mimeData = event->mimeData();
+  if (mimeData->hasText()) {
+    QString fn = mimeData->text();
+    if (fn.endsWith(".fits"))
+      event->acceptProposedAction();
+  }
+}
+
+void Skop::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->acceptProposedAction();
+    
+}
+
+void Skop::dropEvent(QDropEvent *event)
+{
+    const QMimeData *mimeData = event->mimeData();
+
+    if (mimeData->hasText()) {
+      QString fn = mimeData->text();    
+      if (fn.endsWith(".fits")){
+	statusBar()->showMessage( tr("Loading %1").arg(fn));
+	SphericalField * hmap = SphericalField::readFits(fn.toAscii().data());
+	mapList->insertRows(0,1);
+	QModelIndex inserted = mapList->index(0, 0);
+	QVariant v;
+	v.setValue(hmap);
+	mapList->setData(inserted, v,Qt::UserRole);
+	mapList->setData(inserted,QFileInfo(QString(hmap->name().c_str())).baseName());
+	mapList->setData(inserted,hmap->getMin(), MinValRole);
+	mapList->setData(inserted,hmap->getMax(), MaxValRole);
+	event->acceptProposedAction();
+      }
+    } else {
+      statusBar()->showMessage( tr("Cannot display data."));
+    }
+    
+}
+
+void Skop::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    event->accept();
+}

@@ -51,6 +51,11 @@ private slots:
     void about();
     void captureScreen();
 
+ protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private:
     void createActions();
