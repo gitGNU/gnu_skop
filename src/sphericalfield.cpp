@@ -22,11 +22,10 @@
  * \brief base class for pixelized fields on the sphere implementation.
  */    
 
-
+#include "shader.h"
 #include "sphericalfield.h"
 #include "healpixfield.h"
 #include <fstream>
-
 
 void SphericalField::serialize(){
   if(serialized) return;
@@ -50,7 +49,7 @@ void SphericalField::load(){
 void SphericalField::bind(){
   if(bound) return;
   load();
-  int internalformat = GL_LUMINANCE32F_ARB;//GL_LUMINANCE32F_ARB;
+  int internalformat = GlslContext::internalFormat;
   for(int i = 0; i<3; i++){
       int hsize = sqrt(npix/3);
       glActiveTexture(GL_TEXTURE0 +i );
@@ -61,9 +60,6 @@ void SphericalField::bind(){
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
       
-      /*glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, hsize, hsize, 0,
-	GL_RGB, GL_UNSIGNED_BYTE, texmap+(3*i*hsize*hsize) );
-      */
       glTexImage2D(GL_TEXTURE_2D, 0, internalformat, hsize, hsize, 0,
 		   GL_LUMINANCE, GL_FLOAT, data+(i*hsize*hsize) );
       cout << "textureid : "<<textureId[i] << "\t data:" << data[i*hsize*hsize] <<"\n";

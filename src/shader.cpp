@@ -28,6 +28,7 @@
 
 using namespace std;
 bool GlslContext::useGLSL = false;
+int GlslContext::internalFormat = GL_LUMINANCE32F_ARB;
 bool GlslContext::initdone = false;
 int GlslContext::CheckGLError(char *file, int line){
   GLenum glErr;
@@ -49,12 +50,12 @@ bool GlslContext::initGLExtensions()
   initdone = true;
 
   GLenum err = glewInit();
- if(GLEW_OK != err){
+  if(GLEW_OK != err){
     cout << "Error :" << glewGetErrorString(err) << "\n";
     initdone = false;
     return false;
   }
-
+  
   cout << "OpenGL Vendor : " << (char*) glGetString(GL_VENDOR) << "\n";
   cout << "OpenGL Renderer : " << (char*) glGetString(GL_RENDERER) << "\n";
   cout << "OpenGL Version : " << (char*) glGetString(GL_VERSION) << "\n\n";
@@ -116,7 +117,7 @@ bool GlslContext::checkGLSL()
     if (GL_TRUE != glewGetExtension("GL_ARB_texture_float"))
     {
         cout << "GL_ARB_texture_float extension is not available!";
-        useGLSL = false;
+        internalFormat = GL_LUMINANCE;
     }
     if (useGLSL)
     {

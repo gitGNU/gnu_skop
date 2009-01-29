@@ -49,6 +49,7 @@ public :
   static bool checkGLSL(void);
   static bool useGLSL;
   static bool initdone;
+  static int internalFormat;
 };
 
 class Shader{

@@ -46,7 +46,7 @@ GLView::GLView(QWidget *parent)
     rot.eulerZXZ(0,theta0, phi0);
     trolltechPurple = QColor::fromCmykF(0.39, 0.39, 0.0, 0.0);
     setAttribute(Qt::WA_NoSystemBackground);
-    setMinimumSize(400, 400);
+    setMinimumSize(200, 200);
 }
 
 GLView::~GLView()

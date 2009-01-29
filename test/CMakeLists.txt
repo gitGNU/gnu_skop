@@ -1,6 +1,8 @@
 ENABLE_TESTING()
 
 SET(healpix_SRCS
+  ${SkOP_SOURCE_DIR}/src/shader.h
+  ${SkOP_SOURCE_DIR}/src/shader.cpp
   ${SkOP_SOURCE_DIR}/src/healpixfield.cpp
   ${SkOP_SOURCE_DIR}/src/sphericalfield.cpp
   ${SkOP_SOURCE_DIR}/test/healpixtest.h
