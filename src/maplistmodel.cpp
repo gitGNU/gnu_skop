@@ -97,9 +97,7 @@ bool MapInfo::edit(const QVariant &value, int role)
     if(pointer != 0){
       minValue = minScale = pointer->getMin();
       maxValue = maxScale = pointer->getMax();
-      cout << minValue << "," << maxValue << endl;
     }
-    cout << "Now pointing at : "<< pointer << endl;
     return true;
   }
   if (role == MinScaleRole){

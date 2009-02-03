@@ -34,7 +34,7 @@ EngSpinBox::EngSpinBox(QWidget *parent)
 }
 
 double EngSpinBox::valueFromText(const QString &text) const{
-  std::cout << (lineEdit()->inputMask()).toStdString() << "\n";
+  //std::cout << (lineEdit()->inputMask()).toStdString() << "\n";
   return text.toDouble();
 }
 

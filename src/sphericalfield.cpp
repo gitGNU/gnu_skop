@@ -62,12 +62,7 @@ void SphericalField::bind(){
       
       glTexImage2D(GL_TEXTURE_2D, 0, internalformat, hsize, hsize, 0,
 		   GL_LUMINANCE, GL_FLOAT, data+(i*hsize*hsize) );
-      cout << "textureid : "<<textureId[i] << "\t data:" << data[i*hsize*hsize] <<"\n";
   }
-  cout << "textype :" << internalformat << endl;
-  
-  
-
   bound = true;
 }
 

@@ -73,13 +73,12 @@ void GLView::updateShader(const QModelIndex &current)
     string vert = "void main()\n{\ngl_TexCoord[0] = gl_MultiTexCoord0;\n  gl_Position = ftransform();\n}";
     //p = new Program("ang2pix.vert", current.data(Qt::UserRole+1).toString().toAscii());
     //string black = "void main(){gl_FragColor=vec4(0.0,0,0,1.0);}";
-    cout << current.data(Qt::UserRole+1).toString().toStdString();
     const char * filename = current.data(ShaderRole).toString().toStdString().c_str();
     SourceCode sc(filename);
     string fragcode(sc.getContent());
     p = new Program(vert, fragcode);
     //p = new Program(vert, black);
-    cout << p->getLinkerLog();
+    cout << p->getLog();
     nside = current.data(NsideRole).toInt();
     nside = sqrt(nside/12);
     update();
@@ -108,17 +107,11 @@ void GLView::wheelEvent ( QWheelEvent * e ){
 bool GLView::pixel2sky(int x, int y, double & theta, double & phi){
   double u = (2. * x / width()  - 1.) * dist;
   double v = -(2. * y / height() - 1.) * dist;
-  cout << u << "," << v << endl;
   if( u*u+v*v <= 1){
     theta = acos(v);
     phi = asin(u/sin(theta));
-    cout << theta << "," << phi << endl;
-    cout << theta0 << "," << phi0 << endl;
     Vec3 coord(theta,phi);
-    cout << coord;
-    cout << rot;
     coord = rot * coord;
-    cout << coord;
     coord.ang(theta,phi);
     return true;
   }

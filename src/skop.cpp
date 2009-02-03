@@ -97,13 +97,11 @@ void Skop::captureScreen()
 void Skop::selectMap(const QModelIndex &current,
 		     const QModelIndex &previous)
 {
-    cout << "ben alors ?\n";
     
     statusBar()->showMessage( tr("%1 selected").arg(current.data().toString()));
     SphericalField * prev = previous.data(Qt::UserRole).value<SphericalField *>();
     if (prev != NULL) prev->clear();
     SphericalField * val = current.data(Qt::UserRole).value<SphericalField *>();
-    cout << val<< endl;
     
     
     val->bind();

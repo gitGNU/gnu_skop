@@ -33,7 +33,7 @@ class EngSpinBox:public QDoubleSpinBox
   Q_OBJECT
   public slots:
   
-  void setFocalPoint(double fp){std::cout<< "in";fP = fp;}
+  void setFocalPoint(double fp){fP = fp;}
   
   public:
   void setRate(double rt){rate=rt;}
