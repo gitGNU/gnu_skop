@@ -1,0 +1,13 @@
+SkOP (Sky Orthographic Projector) is an openGL viewer that displays
+sky maps projected on a zoomable, rotating virtual globe.
+
+It performs a direct hardware-accelerated projection of the data on
+the sphere. This allows the handling of data at full-resolution,
+interactive change of the color scale, and fast switching between
+different maps.  It accepts maps in the HEALPix pixelization format
+(http://healpix.jpl.nasa.gov/index.shtml) stored in FITS files.
+
+SkOP is designed with the exploitation of Cosmic Microwave Background
+data in mind. For example, the WMAP Space mission data are made
+available at:
+http://lambda.gsfc.nasa.gov/product/map/dr3/m_products.cfm

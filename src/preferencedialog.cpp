@@ -35,10 +35,7 @@ PreferenceDialog::PreferenceDialog(QWidget *parent)
   contentsWidget->setSpacing(12);
 
   pagesWidget = new QStackedWidget;
-  pagesWidget->addWidget(new ConfigurationPage);
-  pagesWidget->addWidget(new UpdatePage);
-  pagesWidget->addWidget(new QueryPage);
-
+  
   QPushButton *closeButton = new QPushButton(tr("Close"));
   
   createIcons();
@@ -64,35 +61,23 @@ PreferenceDialog::PreferenceDialog(QWidget *parent)
   setWindowTitle(tr("User settings"));
 }
 
- void PreferenceDialog::createIcons()
- {
-     QListWidgetItem *configButton = new QListWidgetItem(contentsWidget);
-     //configButton->setIcon(QIcon(":/images/config.png"));
-     configButton->setText(tr("Configuration"));
-     configButton->setTextAlignment(Qt::AlignHCenter);
-     configButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+void PreferenceDialog::createIcons()
+{
+//   QListWidgetItem *configButton = new QListWidgetItem(contentsWidget);
+//   //configButton->setIcon(QIcon(":/images/config.png"));
+//   configButton->setText(tr("Configuration"));
+//   configButton->setTextAlignment(Qt::AlignHCenter);
+//   configButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+  
+  connect(contentsWidget,
+	  SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+	  this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));
+}
 
-     QListWidgetItem *updateButton = new QListWidgetItem(contentsWidget);
-     //updateButton->setIcon(QIcon(":/images/update.png"));
-     updateButton->setText(tr("Update"));
-     updateButton->setTextAlignment(Qt::AlignHCenter);
-     updateButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-     QListWidgetItem *queryButton = new QListWidgetItem(contentsWidget);
-     //queryButton->setIcon(QIcon(":/images/query.png"));
-     queryButton->setText(tr("Query"));
-     queryButton->setTextAlignment(Qt::AlignHCenter);
-     queryButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-     connect(contentsWidget,
-             SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
-             this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));
- }
-
- void PreferenceDialog::changePage(QListWidgetItem *current, QListWidgetItem *previous)
- {
-     if (!current)
-         current = previous;
-
-     pagesWidget->setCurrentIndex(contentsWidget->row(current));
- }
+void PreferenceDialog::changePage(QListWidgetItem *current, QListWidgetItem *previous)
+{
+  if (!current)
+    current = previous;
+  
+  pagesWidget->setCurrentIndex(contentsWidget->row(current));
+}

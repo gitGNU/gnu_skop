@@ -1,0 +1,22 @@
+INSTALLATION:
+=============
+
+Before attempting to install SkOP on your computer, you have to make
+sure that the following depencies are available:
+
+Dependencies:
+-------------
+- Qt4 <http://www.qtsoftware.com/	downloads>
+- cfitsio <http://heasarc.gsfc.nasa.gov/fitsio>
+- GLEW <http://glew.sourceforge.net>
+- An OpenGL implementation
+
+The build operation also requires the cmake utility
+<http://www.cmake.org>. Then type:
+
+cmake .
+make
+
+and optionnally:
+
+make install
