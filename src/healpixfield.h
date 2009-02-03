@@ -36,7 +36,9 @@ class HealpixField: public SphericalField{
   //  Q_OBJECT
 public:
     HealpixField(){
-      shader = "ang2pix_nest.frag";
+      shader = 
+#include "ang2pix_nest.h"
+	;
     }
     
 	    

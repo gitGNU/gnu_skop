@@ -61,8 +61,6 @@ void GLView::initializeGL()
  
     string vert = "void main()\n{\ngl_TexCoord[0] = gl_MultiTexCoord0;\n  gl_Position = ftransform();\n}";
     string black = "void main(){gl_FragColor=vec4(0.0,0,0,1.0);}";
-    //string black = "void main(){gl_FragColor=vec4(gl_TexCoord[0]);}";
-    //p = new Program("ang2pix.vert", "black.frag");
     p = new Program(vert, black);
     cout << p->getLog();
 }
@@ -71,13 +69,8 @@ void GLView::updateShader(const QModelIndex &current)
 {
     delete p;
     string vert = "void main()\n{\ngl_TexCoord[0] = gl_MultiTexCoord0;\n  gl_Position = ftransform();\n}";
-    //p = new Program("ang2pix.vert", current.data(Qt::UserRole+1).toString().toAscii());
-    //string black = "void main(){gl_FragColor=vec4(0.0,0,0,1.0);}";
-    const char * filename = current.data(ShaderRole).toString().toStdString().c_str();
-    SourceCode sc(filename);
-    string fragcode(sc.getContent());
+    string fragcode = current.data(ShaderRole).toString().toStdString();
     p = new Program(vert, fragcode);
-    //p = new Program(vert, black);
     cout << p->getLog();
     nside = current.data(NsideRole).toInt();
     nside = sqrt(nside/12);
