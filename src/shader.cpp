@@ -28,6 +28,7 @@
 
 using namespace std;
 bool GlslContext::useGLSL = false;
+int GlslContext::internalFormat = GL_LUMINANCE32F_ARB;
 bool GlslContext::initdone = false;
 int GlslContext::CheckGLError(char *file, int line){
   GLenum glErr;
@@ -49,12 +50,12 @@ bool GlslContext::initGLExtensions()
   initdone = true;
 
   GLenum err = glewInit();
- if(GLEW_OK != err){
+  if(GLEW_OK != err){
     cout << "Error :" << glewGetErrorString(err) << "\n";
     initdone = false;
     return false;
   }
-
+  
   cout << "OpenGL Vendor : " << (char*) glGetString(GL_VENDOR) << "\n";
   cout << "OpenGL Renderer : " << (char*) glGetString(GL_RENDERER) << "\n";
   cout << "OpenGL Version : " << (char*) glGetString(GL_VERSION) << "\n\n";
@@ -116,7 +117,7 @@ bool GlslContext::checkGLSL()
     if (GL_TRUE != glewGetExtension("GL_ARB_texture_float"))
     {
         cout << "GL_ARB_texture_float extension is not available!";
-        useGLSL = false;
+        internalFormat = GL_LUMINANCE;
     }
     if (useGLSL)
     {
@@ -174,6 +175,19 @@ Shader::Shader(const string code,GLenum sT){
   glShaderSource(shaderHandler, 1, &psource,NULL);
 
   glCompileShader(shaderHandler);
+  int infologLength = 0;
+  int charsWritten  = 0;
+  char *infoLog;
+  string info;
+
+  glGetShaderiv(shaderHandler, GL_INFO_LOG_LENGTH,&infologLength);
+  if (infologLength > 0){
+    infoLog = new char[infologLength];
+    glGetShaderInfoLog(shaderHandler, infologLength, &charsWritten, infoLog);
+    info = infoLog;
+    delete infoLog;
+  }
+  cout << info;
 }
 
 Shader::~Shader(){
@@ -245,6 +259,14 @@ string Program::getLinkerLog(){
     info = infoLog;
     delete infoLog;
   }
+  return info;
+}
+
+string Program::getLog(){
+  string intro = "Vertex Shader Log:\n";
+  string info = intro + vertexShader->getCompilerLog();
+  info = info + "Fragment Shader Log:\n" + fragmentShader->getCompilerLog();
+  info = info + "Linker Log:\n" + getLinkerLog();
   return info;
 }
 

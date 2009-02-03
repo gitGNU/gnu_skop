@@ -49,6 +49,7 @@ public :
   static bool checkGLSL(void);
   static bool useGLSL;
   static bool initdone;
+  static int internalFormat;
 };
 
 class Shader{
@@ -73,6 +74,7 @@ public :
   Program(Shader * vShader, Shader * fShader);
   ~Program();
   string getLinkerLog();
+  string getLog();
   GLint getLoc(const char* name);
   void set1i(const char * name, GLint val);
   void set1f(const char * name, GLfloat val);
