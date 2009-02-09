@@ -80,7 +80,11 @@ class Vec3{
 class Mat3{
   
  public:
-  Mat3(){}
+  Mat3(){
+    for(int i = 0 ; i < 3 ; i++)
+      for(int j = 0 ; j < 3 ; j++)
+	a[i][j] = 0;
+  }
   Mat3(double a1,double a2,double a3,double a4,double a5,double a6,double a7,double a8,double a9){
     a[0][0] = a1;
     a[0][1] = a2;
@@ -97,6 +101,11 @@ class Mat3{
     for(int i = 0 ; i < 3 ; i++)
       for(int j = 0 ; j < 3 ; j++)
 	a[i][j] = tab[3*i+j];
+  }
+  void operator = (Mat3 b){
+    for(int i = 0 ; i < 3 ; i++)
+      for(int j = 0 ; j < 3 ; j++)
+	a[i][j] = b[i][j];
   }
   double * operator[](int i){return a[i];}
   Mat3 operator * (double b){

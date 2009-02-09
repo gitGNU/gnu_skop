@@ -1,5 +1,7 @@
 
 SET(SkOP_SRCS
+  ${SkOP_SOURCE_DIR}/src/catalog.h
+  ${SkOP_SOURCE_DIR}/src/catalog.cpp
   ${SkOP_SOURCE_DIR}/src/pages.h
   ${SkOP_SOURCE_DIR}/src/pages.cpp
   ${SkOP_SOURCE_DIR}/src/preferencedialog.h

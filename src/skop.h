@@ -34,7 +34,7 @@ class QMenu;
 class GLView;
 class QListView;
 class QItemSelectionModel;
-
+class Catalog;
 
 class Skop : public QMainWindow{
     Q_OBJECT
@@ -43,10 +43,10 @@ public:
     Skop();
 signals:
     void mapChanged(const QModelIndex & newmap);
-
     
 private slots:
     void openMap();
+    void openCat();
     void setConfig();
     void selectMap(const QModelIndex &current, const QModelIndex &previous);
     void about();
@@ -81,6 +81,7 @@ private:
     QToolBar *fileToolBar;
 
     QAction *openMapAct;
+    QAction *openCatAct;
     QAction *aboutAct;
     QAction *setupAct;
     QAction *aboutQtAct;

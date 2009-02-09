@@ -28,6 +28,7 @@
 #include <QtOpenGL>
 #include <cmath>
 
+#include "catalog.h"
 #include "glview.h"
 #include "glview.moc"
 #include "maplistmodel.h"
@@ -44,9 +45,11 @@ GLView::GLView(QWidget *parent)
     minV = 0;
     maxV = 0;
     rot.eulerZXZ(0,theta0, phi0);
+    invrot.eulerZXZ(-phi0, -theta0,0);
     trolltechPurple = QColor::fromCmykF(0.39, 0.39, 0.0, 0.0);
     setAttribute(Qt::WA_NoSystemBackground);
     setMinimumSize(200, 200);
+    cat = NULL;
 }
 
 GLView::~GLView()
@@ -111,6 +114,19 @@ bool GLView::pixel2sky(int x, int y, double & theta, double & phi){
   return false;
 }
 
+bool GLView::sky2pixel(double theta, double phi, int & x, int & y){
+  Vec3 coord(theta,phi);
+  coord = invrot * coord;
+  double u = coord.a[1];
+  double v = coord.a[2];
+  x = int(0.5*width() *(u/dist +1));
+  y = int(0.5*height() *(-v/dist +1));
+  if (coord.a[0] >= 0)
+    return true;
+  else 
+    return false;
+}
+
 void GLView::mousePressEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton)
@@ -131,8 +147,9 @@ void GLView::mouseMoveEvent(QMouseEvent *event)
 	theta0 += dy * dist / width ();
 	phi0 += dx * dist / height ();
 	lastPos = event->pos();
-	update();
 	rot.eulerZYZ(0,theta0,phi0);
+	invrot.eulerZYZ(-phi0,-theta0,0);
+	update();
     }
     
 }
@@ -176,6 +193,8 @@ void GLView::paintEvent(QPaintEvent *event)
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
+    if (cat != NULL)
+      cat->draw(painter, this);
     //painter.drawImage((width() - image.width())/2, 0, image);
     painter.end();
 }
@@ -207,4 +226,9 @@ void GLView::setupViewport(int width, int height)
     glOrtho(-1.0,1.0,-1.0,1.0,-1.0,2.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+}
+
+void GLView::changeCat(Catalog * _cat){
+  cat = _cat;
+  cout << "change cat\n";
 }

@@ -28,22 +28,23 @@
 #include <QGLWidget>
 #include "toolbox.h"
 
+class QModelIndex;
 class QWidget;
 class Program;
+class Catalog;
 
 class GLView : public QGLWidget
 {
-    Q_OBJECT
-    
-public:
+  Q_OBJECT
+  public:
   GLView(QWidget *parent = 0);
   ~GLView();
   bool pixel2sky(int x, int y, double & theta, double & phi);
-  //void sky2pixel();
-		  
+  bool sky2pixel(double theta, double phi, int & x, int & y);
 public slots:
-    void updateShader(const QModelIndex & current);
-    void updateScale(double minBound, double maxBound);
+  void updateShader(const QModelIndex & current);
+  void updateScale(double minBound, double maxBound);
+  void changeCat(Catalog * cat);
 signals:
   void pixelSelected(double theta, double phi);
 protected:
@@ -68,8 +69,11 @@ private:
     double minV;
     double maxV;
   
-  Mat3 rot;
+    Mat3 rot;
+    Mat3 invrot;
     int nside;
+    
+    Catalog * cat;
 };
 
 #endif

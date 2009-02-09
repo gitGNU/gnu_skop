@@ -33,6 +33,7 @@
 #include "preferencedialog.h"
 //#include "healpixfield.h"
 #include <QFileDialog>
+#include "catalog.h"
 
 Skop::Skop()
  {
@@ -42,7 +43,7 @@ Skop::Skop()
 
      connect(this, SIGNAL(mapChanged(const QModelIndex &)),
 	     glview, SLOT(updateShader(const QModelIndex &)));
-
+     
      createActions();
      createMenus();
      createToolBars();
@@ -71,6 +72,20 @@ void Skop::openMap()
 	mapList->setData(inserted,hmap->getMin(), MinValRole);
 	mapList->setData(inserted,hmap->getMax(), MaxValRole);
 	//new QListWidgetItem(tr("file %1").arg(fn), mapList);
+    }
+    
+}
+
+void Skop::openCat()
+{
+    QString fn = QFileDialog::getOpenFileName(this, 
+					      "Open a new catalog","Select a catalog file","text files (*.cat)");
+    if ( !fn.isEmpty() ){
+	statusBar()->showMessage( tr("Loading %1").arg(fn));
+	Catalog * cat = new Catalog();
+	cat->read(fn.toAscii().data());
+	glview->changeCat(cat);
+	cout << cat << "emis\n";
     }
     
 }
@@ -188,6 +203,10 @@ void Skop::createActions()
      openMapAct->setShortcut(QKeySequence::Open);
      openMapAct->setStatusTip(tr("Load a map from a fits file"));
      connect(openMapAct, SIGNAL(triggered()), this, SLOT(openMap()));
+
+     openCatAct = new QAction(tr("Open&Cat"),this);
+     openCatAct->setStatusTip(tr("Load a catalog from a text file"));
+     connect(openCatAct, SIGNAL(triggered()), this, SLOT(openCat()));
      
      capture = new QAction(tr("&capture"),this);
      capture->setShortcut(QKeySequence::Copy);
@@ -217,6 +236,7 @@ void Skop::createMenus()
  {
      fileMenu = menuBar()->addMenu(tr("&File"));
      fileMenu->addAction(openMapAct);
+     fileMenu->addAction(openCatAct);
      fileMenu->addAction(setupAct);
      fileMenu->addSeparator();
      fileMenu->addAction(quitAct);
