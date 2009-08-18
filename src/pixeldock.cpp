@@ -23,7 +23,9 @@
 
 #include "pixeldock.h"
 #include "pixeldock.moc"
+#include "toolbox.h"
 #include "maplistmodel.h"
+
 PixelDock::PixelDock(QWidget *parent)
    :QWidget(parent)
 {
@@ -77,8 +79,8 @@ void PixelDock::createControls()
 void PixelDock::update(){
   thetaLabelVal->setNum(theta);
   phiLabelVal->setNum(phi);
-  lonVal->setNum(phi*180/M_PI);
-  latVal->setNum(90-(theta*180/M_PI));
+  lonVal->setNum(fmodulo(phi,M_PI*2)*180/M_PI);
+  latVal->setNum(90-(fmodulo(theta,M_PI)*180/M_PI));
   pixelValueVal->setNum(map.data(PointerRole).value<SphericalField *>()->getValue(theta,phi));
   nsideVal->setNum(map.data(NsideRole).toInt());
   pixelValue->setText(tr("T(%1):").arg(map.data(UnitRole).toString()));

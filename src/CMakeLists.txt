@@ -16,6 +16,8 @@
 # along with SkOP.  If not, see <http://www.gnu.org/licenses/>.
 
 SET(SkOP_SRCS
+  ${SkOP_SOURCE_DIR}/src/simbaddock.h
+  ${SkOP_SOURCE_DIR}/src/simbaddock.cpp
   ${SkOP_SOURCE_DIR}/src/catalog.h
   ${SkOP_SOURCE_DIR}/src/catalog.cpp
   ${SkOP_SOURCE_DIR}/src/pages.h
@@ -44,7 +46,7 @@ SET(SkOP_SRCS
   )
 
 SET(QT_USE_QTOPENGL true)
-
+SET(QT_USE_QTWEBKIT true)
 include(FindQt4)
 
 include(${QT_USE_FILE})

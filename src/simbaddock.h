@@ -21,20 +21,27 @@
  * \brief class definition for the widget presenting web information
  */    
 
-#ifndef PIXELDOCK_H
-#define PIXELDOCK_H
+#ifndef SIMBADDOCK_H
+#define SIMBADDOCK_H
 
 #include <QtGui>
+
+class QWebView;
 
 class SimbadDock : public QWidget{
     Q_OBJECT
 public slots:
-  //    void selectPixel(double theta, double phi);
+  void selectPixel(double theta, double phi);
   // void selectMap(const QModelIndex &current, const QModelIndex &previous);
-    
+  void querySimbad();
+
 public:
   SimbadDock(QWidget *parent = 0);
-    
+  
 private:
   QWebView *view;
+  QPushButton *button;
+  double theta, phi;
 };
+
+#endif

@@ -140,4 +140,8 @@ ostream & operator << (ostream &os,  Vec3 & v);
 
 QRgb jet(double value, int alpha = 255);
 
+inline double fmodulo (double v1, double v2){
+  return (v1>=0) ? ((v1<v2) ? v1 : fmod(v1,v2)) : (fmod(v1,v2)+v2);
+}
+
 #endif

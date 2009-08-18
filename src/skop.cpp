@@ -32,6 +32,7 @@
 //#include "healpixfield.h"
 #include <QFileDialog>
 #include "catalog.h"
+#include "simbaddock.h"
 
 Skop::Skop()
  {
@@ -178,6 +179,14 @@ void Skop::createDockWindows()
      addDockWidget(Qt::LeftDockWidgetArea, dock);
      viewMenu->addAction(dock->toggleViewAction());
      
+     dock = new QDockWidget(tr("Simbad"), this);
+     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+     SimbadDock *sd = new SimbadDock(dock);
+     dock->setWidget(sd);
+     addDockWidget(Qt::LeftDockWidgetArea, dock);
+     viewMenu->addAction(dock->toggleViewAction());
+     connect(glview, SIGNAL(pixelSelected(double , double )),
+	     sd, SLOT(selectPixel(double, double)));
  }
 
 void Skop::createModel()

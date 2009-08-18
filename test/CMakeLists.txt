@@ -14,7 +14,6 @@
 
 # You should have received a copy of the GNU General Public License
 # along with SkOP.  If not, see <http://www.gnu.org/licenses/>.
-
 ENABLE_TESTING()
 
 SET(healpix_SRCS
@@ -27,15 +26,17 @@ SET(healpix_SRCS
   )
 
 SET(QT_USE_QTTEST true)
-
+INCLUDE_DIRECTORIES(
+  ${QT_INCLUDE_DIR}
+  ${QT_QTTEST_INCLUDE_DIR}
+  )
 include(FindQt4)
-
 include(${QT_USE_FILE})
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 
-QT4_AUTOMOC(${healpix_SRCS})
+qt4_automoc(${healpix_SRCS})
 
 ADD_EXECUTABLE(healpixtest ${healpix_SRCS})
 
-TARGET_LINK_LIBRARIES(healpixtest cfitsio ${QT_LIBRARIES} GLEW)
+TARGET_LINK_LIBRARIES(healpixtest cfitsio ${QT_LIBRARIES} ${QT_QTTEST_LIBRARIES} GLEW)

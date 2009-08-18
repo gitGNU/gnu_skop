@@ -29,6 +29,7 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 #add definitions, compiler switches, etc.
 #ADD_DEFINITIONS(-Wall -O3 -pg)
 SET( CMAKE_CXX_FLAGS "-Wall -O3")
+find_package(Qt4 REQUIRED)
 
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(src)
