@@ -28,6 +28,11 @@
 #include <QColor>
 using namespace std;
 
+const double degr2rad = M_PI/180.0;
+const double arcmin2rad = degr2rad/60.0;
+const double rad2degr = 180.0/M_PI;
+const double rad2arcmin = rad2degr*60.0;
+
 class Vec3{
  public:
   Vec3(){a[0] = a[1] = a[2] = 0;}

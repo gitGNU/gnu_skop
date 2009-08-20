@@ -26,20 +26,25 @@
 #include "toolbox.h"
 #include "maplistmodel.h"
 
-PixelDock::PixelDock(QWidget *parent)
+PixelDock::PixelDock(QWidget *glview, QWidget *parent)
    :QWidget(parent)
 {
   createControls();
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(selectedPixelGroup);
+  layout->addWidget(selectedRegionGroup);
   layout->addWidget(generalGroup);
   setLayout(layout);
+  
+  connect(showSel,SIGNAL(stateChanged(int)), glview,SLOT(changeSel(int)));
+  connect(selRadius,SIGNAL(valueChanged(double)),glview,SLOT(changeSelRadius(double)));
+  selRadius->setValue(10);
 }
 
 
 void PixelDock::createControls()
 {
-    selectedPixelGroup = new QGroupBox("Selected pixel");
+  selectedPixelGroup = new QGroupBox(tr("Selected pixel"),this);
     thetaLabel = new QLabel(tr("theta (rad):"));
     phiLabel= new QLabel(tr("phi (rad):"));
     lon= new QLabel(tr("lon (deg):"));
@@ -50,7 +55,7 @@ void PixelDock::createControls()
     latVal= new QLabel();
     pixelValue= new QLabel(tr("T(N/S):"));
     pixelValueVal = new QLabel();
-    QGridLayout *pixelLayout = new QGridLayout;
+    QGridLayout *pixelLayout = new QGridLayout(selectedPixelGroup);
     pixelLayout->addWidget(thetaLabel, 0, 0);
     pixelLayout->addWidget(thetaLabelVal, 0, 1);
     pixelLayout->addWidget(phiLabel, 0, 2);
@@ -62,8 +67,17 @@ void PixelDock::createControls()
     pixelLayout->addWidget(pixelValue, 2, 0);
     pixelLayout->addWidget(pixelValueVal, 2, 1);
     selectedPixelGroup->setLayout(pixelLayout);
-    
-    generalGroup = new QGroupBox("General info");
+
+    selectedRegionGroup = new QGroupBox(tr("Circular region"),this);
+    showSel = new QCheckBox(tr("Draw a circle around selected pixel"),selectedRegionGroup);
+    selRadius = new QDoubleSpinBox(selectedRegionGroup);
+    selRadius->setSuffix(tr("arcmin"));
+    QGridLayout *regionLayout = new QGridLayout(selectedRegionGroup);
+    regionLayout->addWidget(showSel,0,0,1,2);
+    regionLayout->addWidget(selRadius,1,1);
+    regionLayout->addWidget(new QLabel(tr("Radius:"),selectedRegionGroup),1,0);
+
+    generalGroup = new QGroupBox("General info",this);
     nside = new QLabel(tr("nside:"));
     nsideVal = new QLabel();
     QGridLayout *generalLayout = new QGridLayout;
@@ -82,7 +96,7 @@ void PixelDock::update(){
   lonVal->setNum(fmodulo(phi,M_PI*2)*180/M_PI);
   latVal->setNum(90-(fmodulo(theta,M_PI)*180/M_PI));
   pixelValueVal->setNum(map.data(PointerRole).value<SphericalField *>()->getValue(theta,phi));
-  nsideVal->setNum(map.data(NsideRole).toInt());
+  nsideVal->setNum(sqrt(map.data(NsideRole).toInt()/12));
   pixelValue->setText(tr("T(%1):").arg(map.data(UnitRole).toString()));
 }
 

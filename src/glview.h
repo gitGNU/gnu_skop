@@ -40,10 +40,14 @@ class GLView : public QGLWidget
   ~GLView();
   bool pixel2sky(int x, int y, double & theta, double & phi);
   bool sky2pixel(double theta, double phi, int & x, int & y);
+  double getSelRadius(){return selRadius;}
+  void getSelPixel(double & theta, double & phi){theta = selTheta; phi=selPhi;}
 public slots:
   void updateShader(const QModelIndex & current);
   void updateScale(double minBound, double maxBound);
   void changeCat(Catalog * cat);
+  void changeSelRadius(double radius);
+  void changeSel(int state);
 signals:
   void pixelSelected(double theta, double phi);
 protected:
@@ -58,21 +62,26 @@ protected:
     Program * p;    
 
 private:
-    QPoint lastPos;
-    void setupViewport(int width, int height);
-    QColor trolltechPurple;
-    
-    double dist;
-    double theta0;
-    double phi0;
-    double minV;
-    double maxV;
+  QPoint lastPos;
+  void setupViewport(int width, int height);
+  QColor trolltechPurple;
   
-    Mat3 rot;
-    Mat3 invrot;
-    int nside;
-    
-    Catalog * cat;
+  double dist;
+  double theta0;
+  double phi0;
+  double minV;
+  double maxV;
+  
+  double selTheta;
+  double selPhi;
+  double selRadius;
+  bool showSelectedRegion;
+
+  Mat3 rot;
+  Mat3 invrot;
+  int nside;
+  
+  Catalog * cat;
 };
 
 #endif

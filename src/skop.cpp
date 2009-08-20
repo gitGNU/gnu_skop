@@ -154,7 +154,7 @@ void Skop::createDockWindows()
      
      dock = new QDockWidget(tr("Pixel Information"), this);
      dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-     PixelDock *pd = new PixelDock(dock);
+     PixelDock *pd = new PixelDock(glview,dock);
      dock->setWidget(pd);
      addDockWidget(Qt::RightDockWidgetArea, dock);
      viewMenu->addAction(dock->toggleViewAction());
@@ -181,7 +181,7 @@ void Skop::createDockWindows()
      
      dock = new QDockWidget(tr("Simbad"), this);
      dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-     SimbadDock *sd = new SimbadDock(dock);
+     SimbadDock *sd = new SimbadDock(glview,dock);
      dock->setWidget(sd);
      addDockWidget(Qt::LeftDockWidgetArea, dock);
      viewMenu->addAction(dock->toggleViewAction());

@@ -25,12 +25,14 @@
 #include "simbaddock.moc"
 #include "maplistmodel.h"
 #include "toolbox.h"
+#include "glview.h"
 #include <QtWebKit>
 //#include <qurl.h>
 
-SimbadDock::SimbadDock(QWidget *parent)
+SimbadDock::SimbadDock(GLView * glview, QWidget *parent)
    :QWidget(parent)
 {
+  gl = glview;
   view = new QWebView(this);
   view->show();
   button = new QPushButton("Query Simbad ", this);
@@ -41,9 +43,11 @@ void
 SimbadDock::querySimbad(){
   QString coord = "%1d%2";
   QUrl surl("http://simbad.u-strasbg.fr/simbad/sim-coo");
+  //QUrl surl("http://simbad.u-strasbg.fr/simbad/sim-sam");
   surl.addQueryItem("CooFrame","GAL");
+  //surl.addQueryItem("Criteria",QString("region(circle,Gal,%1d%2,%3d)").arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)).arg(gl->getSelRadius()*rad2degr));
   surl.addQueryItem("Coord",coord.arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)));
-  surl.addQueryItem("Radius","10");
+  surl.addQueryItem("Radius",QString("%1").arg(gl->getSelRadius()*rad2arcmin));
   surl.addQueryItem("Radius.unit","arcmin");
   view->load(surl);
   view->show();

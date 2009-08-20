@@ -40,6 +40,10 @@ GLView::GLView(QWidget *parent)
 {
     theta0 = 0;
     phi0 = 0;
+    selTheta=0;
+    selPhi=0;
+    selRadius = 10*arcmin2rad;
+    showSelectedRegion=false;
     dist = 1;
     minV = 0;
     maxV = 0;
@@ -131,9 +135,9 @@ void GLView::mousePressEvent(QMouseEvent *event)
     if (event->buttons() & Qt::LeftButton)
 	lastPos = event->pos();
     else if (event->buttons() & Qt::RightButton) {
-      double theta, phi;
-      pixel2sky(event->x(), event->y(), theta, phi);
-      emit pixelSelected(theta, phi);
+      pixel2sky(event->x(), event->y(), selTheta, selPhi);
+      emit pixelSelected(selTheta, selPhi);
+      if (showSelectedRegion) update();
     }
     
 }
@@ -195,6 +199,20 @@ void GLView::paintEvent(QPaintEvent *event)
     if (cat != NULL)
       cat->draw(painter, this);
     //painter.drawImage((width() - image.width())/2, 0, image);
+    if (showSelectedRegion){
+      QPen pen(Qt::white,1);
+      int x, y,radiusx,radiusy,radius;
+      if(sky2pixel(selTheta,selPhi,x,y)){
+	sky2pixel(selTheta,selPhi+selRadius,radiusx, radiusy);
+	radius = sqrt((radiusx-x)*(radiusx-x)+(radiusy-y)*(radiusy-y));
+	radius = radius > 0 ? radius : 1;
+	painter.setPen(pen);
+	painter.save();
+	painter.translate(x - radius, y - radius);
+	painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
+	painter.restore();  
+      }
+    }
     painter.end();
 }
 /*
@@ -230,4 +248,15 @@ void GLView::setupViewport(int width, int height)
 void GLView::changeCat(Catalog * _cat){
   cat = _cat;
   cout << "change cat\n";
+}
+
+void GLView::changeSelRadius(double radius){
+  selRadius = radius*arcmin2rad;
+  if (showSelectedRegion) update();
+}
+
+void GLView::changeSel(int state){
+  if (state == Qt::Checked) showSelectedRegion = true;
+  else showSelectedRegion = false;
+  update();
 }

@@ -33,7 +33,7 @@ public slots:
     void selectMap(const QModelIndex &current, const QModelIndex &previous);
     
 public:
-  PixelDock(QWidget *parent = 0);
+  PixelDock(QWidget *glview ,QWidget *parent = 0);
     
 private:
   void createControls();
@@ -57,6 +57,9 @@ private:
   
   QPersistentModelIndex map;
   
+  QGroupBox *selectedRegionGroup;
+  QCheckBox *showSel;
+  QDoubleSpinBox *selRadius;
   double theta, phi;
 };
 

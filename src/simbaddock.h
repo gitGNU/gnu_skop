@@ -27,6 +27,7 @@
 #include <QtGui>
 
 class QWebView;
+class GLView;
 
 class SimbadDock : public QWidget{
     Q_OBJECT
@@ -36,12 +37,13 @@ public slots:
   void querySimbad();
 
 public:
-  SimbadDock(QWidget *parent = 0);
+  SimbadDock(GLView * glview, QWidget *parent = 0);
   
 private:
   QWebView *view;
   QPushButton *button;
   double theta, phi;
+  GLView *gl;
 };
 
 #endif
