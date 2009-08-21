@@ -38,6 +38,7 @@ PixelDock::PixelDock(QWidget *glview, QWidget *parent)
   
   connect(showSel,SIGNAL(stateChanged(int)), glview,SLOT(changeSel(int)));
   connect(selRadius,SIGNAL(valueChanged(double)),glview,SLOT(changeSelRadius(double)));
+  connect(addToCatalog, SIGNAL(clicked()),glview,SLOT(addSource()));
   selRadius->setValue(10);
 }
 
@@ -72,10 +73,14 @@ void PixelDock::createControls()
     showSel = new QCheckBox(tr("Draw a circle around selected pixel"),selectedRegionGroup);
     selRadius = new QDoubleSpinBox(selectedRegionGroup);
     selRadius->setSuffix(tr("arcmin"));
+    selRadius->setMaximum(180*60);
+    selRadius->setAccelerated(true);
+    addToCatalog = new QPushButton(tr("Add to Catalog"), this);
     QGridLayout *regionLayout = new QGridLayout(selectedRegionGroup);
     regionLayout->addWidget(showSel,0,0,1,2);
     regionLayout->addWidget(selRadius,1,1);
     regionLayout->addWidget(new QLabel(tr("Radius:"),selectedRegionGroup),1,0);
+    regionLayout->addWidget(addToCatalog,2,0,1,2);
 
     generalGroup = new QGroupBox("General info",this);
     nside = new QLabel(tr("nside:"));

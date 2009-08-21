@@ -61,6 +61,7 @@ private:
   QCheckBox *showSel;
   QDoubleSpinBox *selRadius;
   double theta, phi;
+  QPushButton *addToCatalog;
 };
 
 #endif

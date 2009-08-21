@@ -52,7 +52,7 @@ GLView::GLView(QWidget *parent)
     trolltechPurple = QColor::fromCmykF(0.39, 0.39, 0.0, 0.0);
     setAttribute(Qt::WA_NoSystemBackground);
     setMinimumSize(200, 200);
-    cat = NULL;
+    cat = new Catalog();
 }
 
 GLView::~GLView()
@@ -160,60 +160,67 @@ void GLView::mouseMoveEvent(QMouseEvent *event)
 
 void GLView::paintEvent(QPaintEvent *event)
 {
-    QPainter painter;
-    painter.begin(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    qglClearColor(trolltechPurple.dark());
-    setupViewport(width(), height());
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  QPainter painter(this);
+  painter.setRenderHint(QPainter::Antialiasing);
+  makeCurrent();
+  glPushAttrib(GL_ALL_ATTRIB_BITS);
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  qglClearColor(trolltechPurple.dark());
+  setupViewport(width(), height());
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  
+  p->start();
+  p->set1i("tex1",3);
+  p->set1i("tex2",4);
+  p->set1i("tex3",5);
+  p->set1i("nside", nside);
+  p->set1f("dist", dist);
+  p->set1f("theta0", theta0);
+  p->set1f("phi0", phi0);
+  p->set1f("minv",minV);
+  p->set1f("maxv",maxV);
+  glBegin(GL_POLYGON);
+  glTexCoord2f(0,0);glVertex3f (-1.0, -1.0, -0.5f);
+  glTexCoord2f(1,0);glVertex3f (1.0, -1.0, -0.5f);
+  glTexCoord2f(1,1);glVertex3f (1.0, 1.0, -0.5f);
+  glTexCoord2f(0,1);glVertex3f (-1.0, 1.0, -0.5f);
+  glEnd();
+  p->stop();
+  
+  glPopAttrib();
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  
+  
+  //painter.begin(this);
 
-    p->start();
-    p->set1i("tex1",0);
-    p->set1i("tex2",1);
-    p->set1i("tex3",2);
-    p->set1i("nside", nside);
-    p->set1f("dist", dist);
-    p->set1f("theta0", theta0);
-    p->set1f("phi0", phi0);
-    p->set1f("minv",minV);
-    p->set1f("maxv",maxV);
-    glBegin(GL_POLYGON);
-    glTexCoord2f(0,0);glVertex3f (-1.0, -1.0, -0.5f);
-    glTexCoord2f(1,0);glVertex3f (1.0, -1.0, -0.5f);
-    glTexCoord2f(1,1);glVertex3f (1.0, 1.0, -0.5f);
-    glTexCoord2f(0,1);glVertex3f (-1.0, 1.0, -0.5f);
-    glEnd();
-    p->stop();
-    
-    glPopAttrib();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    if (cat != NULL)
-      cat->draw(painter, this);
-    //painter.drawImage((width() - image.width())/2, 0, image);
-    if (showSelectedRegion){
-      QPen pen(Qt::white,1);
-      int x, y,radiusx,radiusy,radius;
-      if(sky2pixel(selTheta,selPhi,x,y)){
-	sky2pixel(selTheta,selPhi+selRadius,radiusx, radiusy);
-	radius = sqrt((radiusx-x)*(radiusx-x)+(radiusy-y)*(radiusy-y));
-	radius = radius > 0 ? radius : 1;
-	painter.setPen(pen);
-	painter.save();
-	painter.translate(x - radius, y - radius);
-	painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
-	painter.restore();  
-      }
+  if (cat != NULL)
+    cat->draw(painter, this);
+  //painter.drawImage((width() - image.width())/2, 0, image);
+  if (showSelectedRegion){
+    QPen pen(Qt::red,2);
+    QFont font("Arial", 10);
+    font.setStyleStrategy(QFont::NoAntialias);
+    painter.setFont(font);
+    int x, y,radiusx,radiusy,radius;
+    if(sky2pixel(selTheta,selPhi,x,y)){
+      sky2pixel(selTheta,selPhi+selRadius,radiusx, radiusy);
+      radius = sqrt((radiusx-x)*(radiusx-x)+(radiusy-y)*(radiusy-y));
+      radius = radius > 0 ? radius : 1;
+      painter.setPen(pen);
+      painter.save();
+      painter.translate(x - radius, y - radius);
+      painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
+      painter.drawText(QPoint(0,0),"Bordel !!");
+      painter.restore();
     }
-    painter.end();
+  }
+  painter.end();
 }
 /*
 void GLView::paintGL()
@@ -259,4 +266,14 @@ void GLView::changeSel(int state){
   if (state == Qt::Checked) showSelectedRegion = true;
   else showSelectedRegion = false;
   update();
+}
+
+void GLView::addSource(){
+  bool ok;
+  QString text = QInputDialog::getText(this, tr("Add a new source"),
+				       tr("Source name:"), QLineEdit::Normal,
+				       "", &ok);
+  if (ok && !text.isEmpty())
+    cat->add(Source(selTheta,selPhi, selRadius, text));
+  
 }

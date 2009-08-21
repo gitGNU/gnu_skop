@@ -48,6 +48,7 @@ public slots:
   void changeCat(Catalog * cat);
   void changeSelRadius(double radius);
   void changeSel(int state);
+  void addSource();
 signals:
   void pixelSelected(double theta, double phi);
 protected:

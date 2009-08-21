@@ -29,26 +29,64 @@
 #include <QtWebKit>
 //#include <qurl.h>
 
+const QString SimbadDock::oTypesNames[6]={"Any", "Rad", "IR", "Neb", "Psr","Other"};
+
+
 SimbadDock::SimbadDock(GLView * glview, QWidget *parent)
    :QWidget(parent)
 {
   gl = glview;
-  view = new QWebView(this);
-  view->show();
+  QVBoxLayout *generalLayout = new QVBoxLayout(this);
   button = new QPushButton("Query Simbad ", this);
+  generalLayout->addWidget(button);
+
+  QGroupBox * oTypeGroup = new QGroupBox("Object type",this);
+  generalLayout->addWidget(oTypeGroup);
+  
+  typeLine = new QLineEdit(this);
+  generalLayout->addWidget(typeLine);
+
+  view = new QWebView(this);
+  generalLayout->addWidget(view);
   connect(button, SIGNAL(clicked()), this,SLOT(querySimbad()));
+  view->show();
+
+  QHBoxLayout *layout = new QHBoxLayout(oTypeGroup);
+  oTypeGroup->setLayout(layout);
+  for (int i = 0; i<6;i++){
+    typesButton[i] = new QRadioButton(oTypesNames[i],oTypeGroup);
+    layout->addWidget(typesButton[i]);
+  }
+  connect(typesButton[5],SIGNAL(toggled(bool)),typeLine,SLOT(setEnabled(bool)));
+  typesButton[0]->setChecked(true);
+  typeLine->setEnabled(false);
+  
 }
 
 void
 SimbadDock::querySimbad(){
-  QString coord = "%1d%2";
-  QUrl surl("http://simbad.u-strasbg.fr/simbad/sim-coo");
-  //QUrl surl("http://simbad.u-strasbg.fr/simbad/sim-sam");
-  surl.addQueryItem("CooFrame","GAL");
-  //surl.addQueryItem("Criteria",QString("region(circle,Gal,%1d%2,%3d)").arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)).arg(gl->getSelRadius()*rad2degr));
-  surl.addQueryItem("Coord",coord.arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)));
-  surl.addQueryItem("Radius",QString("%1").arg(gl->getSelRadius()*rad2arcmin));
-  surl.addQueryItem("Radius.unit","arcmin");
+  int i=-1;
+  while(!typesButton[++i]->isChecked());
+  
+  //QString coord = "%1d%2";
+  //QUrl surl("http://simbad.u-strasbg.fr/simbad/sim-coo");
+  QUrl surl("http://simbad.u-strasbg.fr/simbad/sim-sam");
+  //surl.addQueryItem("CooFrame","GAL");
+  switch(i){
+  case 0:
+    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1d%2,%3d)").arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)).arg(gl->getSelRadius()*rad2degr));
+    break;
+  case 5:
+    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1d%2,%3d) & maintypes=%4").arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)).arg(gl->getSelRadius()*rad2degr).arg(typeLine->text()));
+    break;
+  default:
+    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1d%2,%3d) & maintypes=%4").arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)).arg(gl->getSelRadius()*rad2degr).arg(oTypesNames[i]));
+  }
+  //surl.addQueryItem("Coord",coord.arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)));
+  //surl.addQueryItem("Radius",QString("%1").arg(gl->getSelRadius()*rad2arcmin));
+  //surl.addQueryItem("Radius.unit","arcmin");
+  surl.addQueryItem("OutputMode","LIST");
+  //cout << surl.toString().toStdString();
   view->load(surl);
   view->show();
 }

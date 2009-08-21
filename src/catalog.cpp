@@ -24,17 +24,17 @@
 #include "catalog.h"
 #include <QPainter>
 
-void Source::draw(QPainter & painter,GLView * view){
-  int x, y,radius = 5;
-  if(view->sky2pixel(theta,phi,x,y)){
-    QPen pen(Qt::red, 2);
-    painter.setPen(pen);
-    painter.save();
-    painter.translate(x - radius, y - radius);
-    painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
-    painter.restore();  
-  }
-}
+// void Source::draw(QPainter & painter,GLView * view){
+//   int x, y,radius = 5;
+//   if(view->sky2pixel(theta,phi,x,y)){
+//     QPen pen(Qt::red, 2);
+//     painter.setPen(pen);
+//     painter.save();
+//     painter.translate(x - radius, y - radius);
+//     painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
+//     painter.restore();  
+//   }
+// }
 
 void Source::read(istream &is){
   is >> theta
@@ -56,12 +56,34 @@ void Catalog::read(string filename){
 void Catalog::draw(QPainter & painter,GLView * view){
   list<Source>::iterator s;
   int i =0;
-  cout << "il ya " << sources.size() << endl;
+  int x, y,radius = 5,radiusx,radiusy;
+  QPen pen(Qt::red, 2);
+  painter.setPen(pen);
+  painter.setFont(QFont("Arial", 10));
+  
   for (s = sources.begin() ; s != sources.end();s++){
-    cout << "source: "<<i++ << endl;
-    cout << (*s).theta << "," << (*s).phi << ","<< (*s).radius << ","<<endl;
-    (*s).draw(painter, view);
+    //cout << "source: "<<i++ << endl;
+    //cout << (*s).theta << "," << (*s).phi << ","<< (*s).radius << ","<<endl;
+    if(view->sky2pixel(s->theta,s->phi,x,y)){
+      if (s->radius != 0){
+	view->sky2pixel(s->theta,s->phi+s->radius,radiusx, radiusy);
+	radius = sqrt((radiusx-x)*(radiusx-x)+(radiusy-y)*(radiusy-y));
+	radius = radius > 0 ? radius : 1;
+      }
+      else radius = 5;
+      painter.save();
+      painter.translate(x - radius, y - radius);
+      painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
+      //if (s->name != "")
+      //painter.drawText(QPoint(int(2*radius),int(2*radius)),"pouet");
+      
+      painter.restore();  
+    }
     
-  }
-
+    cout << "draw text \n";
+    //(*s).draw(painter, view);
+  } 
+  painter.drawText(QPoint(100,100),"pouet");
 }
+
+

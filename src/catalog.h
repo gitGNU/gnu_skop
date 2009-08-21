@@ -33,9 +33,18 @@ using namespace std;
 class Source
 {
 public:  
-  void draw(QPainter & painter, GLView * view);
+  //void draw(QPainter & painter, GLView * view);
   void read(istream &is);
   double theta, phi, radius;
+  QString name,type;
+  
+  Source(double th = 0, double ph = 0, double rad = 0, QString n = "", QString t = "")
+    :theta(th), phi(ph), radius(rad), name(n), type(t)
+  {
+    cout << name.toStdString() << endl;
+  }
+  
+  
 };
 
 class Catalog
@@ -44,6 +53,7 @@ class Catalog
   
   void draw(QPainter & painter, GLView * view);
   void read(string filename);
+  void add(Source s){sources.push_back(s);}
  private:
   list<Source> sources;
 

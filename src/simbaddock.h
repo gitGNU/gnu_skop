@@ -44,6 +44,9 @@ private:
   QPushButton *button;
   double theta, phi;
   GLView *gl;
+  QRadioButton * typesButton[6];
+  QLineEdit * typeLine;
+  const static QString oTypesNames[6];
 };
 
 #endif
