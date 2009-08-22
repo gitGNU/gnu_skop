@@ -59,7 +59,7 @@ void Catalog::draw(QPainter & painter,GLView * view){
   int x, y,radius = 5,radiusx,radiusy;
   QPen pen(Qt::red, 2);
   painter.setPen(pen);
-  painter.setFont(QFont("Arial", 10));
+  //painter.setFont(QFont("Arial", 10));
   
   for (s = sources.begin() ; s != sources.end();s++){
     //cout << "source: "<<i++ << endl;
@@ -74,16 +74,14 @@ void Catalog::draw(QPainter & painter,GLView * view){
       painter.save();
       painter.translate(x - radius, y - radius);
       painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
-      //if (s->name != "")
-      //painter.drawText(QPoint(int(2*radius),int(2*radius)),"pouet");
+      if (s->name != "")
+	painter.drawText(QPoint(int(2*radius),int(2*radius)),s->name);
       
       painter.restore();  
     }
-    
-    cout << "draw text \n";
     //(*s).draw(painter, view);
   } 
-  painter.drawText(QPoint(100,100),"pouet");
+  
 }
 
 

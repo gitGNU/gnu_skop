@@ -173,9 +173,9 @@ void GLView::paintEvent(QPaintEvent *event)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   
   p->start();
-  p->set1i("tex1",3);
-  p->set1i("tex2",4);
-  p->set1i("tex3",5);
+  p->set1i("tex1",1);
+  p->set1i("tex2",2);
+  p->set1i("tex3",3);
   p->set1i("nside", nside);
   p->set1f("dist", dist);
   p->set1f("theta0", theta0);
@@ -203,10 +203,10 @@ void GLView::paintEvent(QPaintEvent *event)
     cat->draw(painter, this);
   //painter.drawImage((width() - image.width())/2, 0, image);
   if (showSelectedRegion){
-    QPen pen(Qt::red,2);
-    QFont font("Arial", 10);
-    font.setStyleStrategy(QFont::NoAntialias);
-    painter.setFont(font);
+    QPen pen(Qt::white,1);
+    //QFont font("Arial", 10);
+    //font.setStyleStrategy(QFont::NoAntialias);
+    //painter.setFont(font);
     int x, y,radiusx,radiusy,radius;
     if(sky2pixel(selTheta,selPhi,x,y)){
       sky2pixel(selTheta,selPhi+selRadius,radiusx, radiusy);
@@ -216,7 +216,7 @@ void GLView::paintEvent(QPaintEvent *event)
       painter.save();
       painter.translate(x - radius, y - radius);
       painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
-      painter.drawText(QPoint(0,0),"Bordel !!");
+      //painter.drawText(QPoint(0,0),"Bordel !!");
       painter.restore();
     }
   }

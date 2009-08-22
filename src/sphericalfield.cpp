@@ -48,22 +48,38 @@ void SphericalField::load(){
 void SphericalField::bind(){
   if(bound) return;
   load();
-  int internalformat = GlslContext::internalFormat;
+  int internal_format = GlslContext::internalFormat;
+  int texture_target = GL_TEXTURE_2D;
+  int texture_format = GL_LUMINANCE;
   for(int i = 0; i<3; i++){
     int hsize = sqrt(npix/3);
-    //glActiveTexture(GL_TEXTURE0 +i );
+    
+    glActiveTexture(GL_TEXTURE0+i+1);
     glGenTextures( 1, textureId+i);
-    glBindTexture(GL_TEXTURE_2D, textureId[i]);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-      
-    glTexImage2D(GL_TEXTURE_2D, 0, internalformat, hsize, hsize, 0,
-		 GL_LUMINANCE, GL_FLOAT, data+(i*hsize*hsize) );
+    glBindTexture(texture_target, textureId[i]);
+    
+    // turn off filtering and set proper wrap mode 
+    // (obligatory for float textures atm)
+    glTexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    // set texenv to replace instead of the default modulate
+
+    // and allocate graphics memory
+    glTexImage2D(texture_target, 0, internal_format, 
+		 hsize, hsize, 0, texture_format, GL_FLOAT, 0);
+    glTexSubImage2D(texture_target,0,0,0,hsize,hsize,
+		    texture_format,GL_FLOAT,data+(i*hsize*hsize));
+    //glTexImage2D(GL_TEXTURE_2D, 0, internalformat, hsize, hsize, 0,
+    //GL_LUMINANCE, GL_FLOAT, data+(i*hsize*hsize) );
+    
     cout << textureId[i]<<endl;
+    
   }
   bound = true;
+  glActiveTexture(GL_TEXTURE0);
 }
 
 void SphericalField::clear(){

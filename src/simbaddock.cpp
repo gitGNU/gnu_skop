@@ -68,19 +68,25 @@ SimbadDock::querySimbad(){
   int i=-1;
   while(!typesButton[++i]->isChecked());
   
-  //QString coord = "%1d%2";
+  QString coord;
+  if (90-(fmodulo(theta,M_PI)*180/M_PI)<0)
+    coord = "%1d%2";
+  else
+    coord = "%1d +%2";
+  coord = coord.arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI));
+  cout << coord.toStdString();
   //QUrl surl("http://simbad.u-strasbg.fr/simbad/sim-coo");
   QUrl surl("http://simbad.u-strasbg.fr/simbad/sim-sam");
   //surl.addQueryItem("CooFrame","GAL");
   switch(i){
   case 0:
-    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1d%2,%3d)").arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)).arg(gl->getSelRadius()*rad2degr));
+    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1,%2d)").arg(coord).arg(gl->getSelRadius()*rad2degr));
     break;
   case 5:
-    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1d%2,%3d) & maintypes=%4").arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)).arg(gl->getSelRadius()*rad2degr).arg(typeLine->text()));
+    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1,%2d) & maintypes=%3").arg(coord).arg(gl->getSelRadius()*rad2degr).arg(typeLine->text()));
     break;
   default:
-    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1d%2,%3d) & maintypes=%4").arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)).arg(gl->getSelRadius()*rad2degr).arg(oTypesNames[i]));
+    surl.addQueryItem("Criteria",QString("region(circle,Gal,%1,%2d) & maintypes=%3").arg(coord).arg(gl->getSelRadius()*rad2degr).arg(oTypesNames[i]));
   }
   //surl.addQueryItem("Coord",coord.arg(fmodulo(phi,M_PI*2)*180/M_PI).arg(90-(fmodulo(theta,M_PI)*180/M_PI)));
   //surl.addQueryItem("Radius",QString("%1").arg(gl->getSelRadius()*rad2arcmin));
