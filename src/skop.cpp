@@ -89,6 +89,17 @@ void Skop::openCat()
     
 }
 
+void Skop::writeCat()
+{
+    QString fn = QFileDialog::getSaveFileName(this, 
+					      "Write the current catalog","Select a filename for the catalogue","text files (*.cat)");
+    if ( !fn.isEmpty() ){
+	statusBar()->showMessage( tr("Writing to %1").arg(fn));
+	glview->writeCat(fn.toStdString());
+    }
+    
+}
+
 void Skop::setConfig()
 {
   PreferenceDialog dialog(this);
@@ -214,6 +225,10 @@ void Skop::createActions()
      openCatAct = new QAction(tr("Open&Cat"),this);
      openCatAct->setStatusTip(tr("Load a catalog from a text file"));
      connect(openCatAct, SIGNAL(triggered()), this, SLOT(openCat()));
+
+     writeCatAct = new QAction(tr("Write&Cat"),this);
+     writeCatAct->setStatusTip(tr("Write the current catalog in a text file"));
+     connect(writeCatAct, SIGNAL(triggered()), this, SLOT(writeCat()));
      
      capture = new QAction(tr("&capture"),this);
      capture->setShortcut(QKeySequence::Copy);
@@ -246,9 +261,10 @@ void Skop::createMenus()
      fileMenu->addAction(openCatAct);
      fileMenu->addAction(setupAct);
      fileMenu->addSeparator();
+     fileMenu->addAction(writeCatAct);
+     fileMenu->addSeparator();
      fileMenu->addAction(quitAct);
      
-
      viewMenu = menuBar()->addMenu(tr("&View"));
 
      menuBar()->addSeparator();

@@ -46,6 +46,7 @@ signals:
 private slots:
     void openMap();
     void openCat();
+    void writeCat();
     void setConfig();
     void selectMap(const QModelIndex &current, const QModelIndex &previous);
     void about();
@@ -58,34 +59,35 @@ private slots:
     void dropEvent(QDropEvent *event);
 
 private:
-    void createActions();
-    void createMenus();
-    void createToolBars();
-    void createStatusBar();
-    void createDockWindows();
-    void createModel();
-    
-
-    GLView *glview;
-
-    //QListWidget *mapList;
-    MapListModel * mapList;
-    QListView *listView;
-    QItemSelectionModel * selectionModel;
-    
-    
-    QMenu *fileMenu;
-    QMenu *viewMenu;
-    QMenu *helpMenu;
-    QToolBar *fileToolBar;
-
-    QAction *openMapAct;
-    QAction *openCatAct;
-    QAction *aboutAct;
-    QAction *setupAct;
-    QAction *aboutQtAct;
-    QAction *quitAct;
-    QAction *capture;
+  void createActions();
+  void createMenus();
+  void createToolBars();
+  void createStatusBar();
+  void createDockWindows();
+  void createModel();
+  
+  
+  GLView *glview;
+  
+  //QListWidget *mapList;
+  MapListModel * mapList;
+  QListView *listView;
+  QItemSelectionModel * selectionModel;
+  
+  
+  QMenu *fileMenu;
+  QMenu *viewMenu;
+  QMenu *helpMenu;
+  QToolBar *fileToolBar;
+  
+  QAction *openMapAct;
+  QAction *openCatAct;
+  QAction *writeCatAct;
+  QAction *aboutAct;
+  QAction *setupAct;
+  QAction *aboutQtAct;
+  QAction *quitAct;
+  QAction *capture;
 };
 
 #endif

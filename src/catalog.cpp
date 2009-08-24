@@ -23,7 +23,7 @@
 
 #include "catalog.h"
 #include <QPainter>
-
+#include <sstream>
 // void Source::draw(QPainter & painter,GLView * view){
 //   int x, y,radius = 5;
 //   if(view->sky2pixel(theta,phi,x,y)){
@@ -37,11 +37,23 @@
 // }
 
 void Source::read(istream &is){
+  // char buffer[1000];
+  // is.getline(buffer, 1000);
+  // istringstream entree(buffer);
+  string s;
   is >> theta
      >> phi
-     >> radius;
+     >> radius
+     >> s;
+  name = s.c_str();
 }
 
+void Source::write(ostream &os){
+  os << theta << "\t"
+     << phi   << "\t"
+     << radius<< "\t"
+     << name.toStdString()  << "\t" << endl;
+}
 void Catalog::read(string filename){
   ifstream is(filename.c_str(),ios::in);
   char comment[1000];
@@ -55,7 +67,6 @@ void Catalog::read(string filename){
 
 void Catalog::draw(QPainter & painter,GLView * view){
   list<Source>::iterator s;
-  int i =0;
   int x, y,radius = 5,radiusx,radiusy;
   QPen pen(Qt::red, 2);
   painter.setPen(pen);
@@ -84,4 +95,14 @@ void Catalog::draw(QPainter & painter,GLView * view){
   
 }
 
+void Catalog::write(string filename){
+  ofstream os(filename.c_str(),ios::out);
+  list<Source>::iterator s;
+
+  os << "# theta [rad] phi [rad] radius [rad] name [string]\n";
+  
+  for (s = sources.begin() ; s != sources.end();s++){
+    s->write(os);
+  }
+}
 

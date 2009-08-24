@@ -257,6 +257,10 @@ void GLView::changeCat(Catalog * _cat){
   cout << "change cat\n";
 }
 
+void GLView::writeCat(string filename){
+  cat->write(filename);
+}
+
 void GLView::changeSelRadius(double radius){
   selRadius = radius*arcmin2rad;
   if (showSelectedRegion) update();
@@ -273,7 +277,9 @@ void GLView::addSource(){
   QString text = QInputDialog::getText(this, tr("Add a new source"),
 				       tr("Source name:"), QLineEdit::Normal,
 				       "", &ok);
-  if (ok && !text.isEmpty())
+  if (ok && !text.isEmpty()){
     cat->add(Source(selTheta,selPhi, selRadius, text));
+    update();
+  }
   
 }

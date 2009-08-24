@@ -35,6 +35,7 @@ class Source
 public:  
   //void draw(QPainter & painter, GLView * view);
   void read(istream &is);
+  void write(ostream &os);
   double theta, phi, radius;
   QString name,type;
   
@@ -54,6 +55,7 @@ class Catalog
   void draw(QPainter & painter, GLView * view);
   void read(string filename);
   void add(Source s){sources.push_back(s);}
+  void write(string filename);
  private:
   list<Source> sources;
 

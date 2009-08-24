@@ -46,6 +46,7 @@ public slots:
   void updateShader(const QModelIndex & current);
   void updateScale(double minBound, double maxBound);
   void changeCat(Catalog * cat);
+  void writeCat(string filename);
   void changeSelRadius(double radius);
   void changeSel(int state);
   void addSource();
