@@ -45,7 +45,7 @@ GLView::GLView(QWidget *parent)
     selRadius = 10*arcmin2rad;
     showSelectedRegion=false;
     showPolarVector=false;
-    showGraticule=false;
+    showGraticule=true;
     dist = 1;
     minV = 0;
     maxV = 0;
@@ -230,6 +230,27 @@ void GLView::paintEvent(QPaintEvent *event)
       for(int j=0; j<height();j+=10){
 	if(pixel2sky(i, j, theta, phi)){
 	  painter.drawLine(i,j,i+5,j);
+	}
+      }
+    }
+  }
+  if (showGraticule){
+    QPen pen(Qt::white,1);
+    painter.setPen(pen);
+    double theta,phi;
+    for(double theta=0; theta<2*M_PI;theta+=10*degr2rad){
+      for(double phi=0; phi<M_PI;phi+=1*degr2rad){
+	int x1,x2,y1,y2;
+	if(sky2pixel(theta, phi,x1,y1) | sky2pixel(theta, phi+1*degr2rad,x2,y2)){
+	  painter.drawLine(x1,y1,x2,y2);
+	}
+      }
+    }
+    for(double phi=0; phi<M_PI;phi+=10*degr2rad){
+      for(double theta=0; theta<2*M_PI;theta+=1*degr2rad){
+	int x1,x2,y1,y2;
+	if(sky2pixel(theta, phi,x1,y1) | sky2pixel(theta+1*degr2rad, phi,x2,y2)){
+	  painter.drawLine(x1,y1,x2,y2);
 	}
       }
     }
