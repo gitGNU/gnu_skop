@@ -44,6 +44,8 @@ GLView::GLView(QWidget *parent)
     selPhi=0;
     selRadius = 10*arcmin2rad;
     showSelectedRegion=false;
+    showPolarVector=false;
+    showGraticule=false;
     dist = 1;
     minV = 0;
     maxV = 0;
@@ -218,6 +220,18 @@ void GLView::paintEvent(QPaintEvent *event)
       painter.drawEllipse(0, 0, int(2*radius), int(2*radius));
       //painter.drawText(QPoint(0,0),"Bordel !!");
       painter.restore();
+    }
+  }
+  if (showPolarVector){
+    QPen pen(Qt::white,1);
+    painter.setPen(pen);
+    double theta,phi;
+    for(int i=0; i<width();i+=10){
+      for(int j=0; j<height();j+=10){
+	if(pixel2sky(i, j, theta, phi)){
+	  painter.drawLine(i,j,i+5,j);
+	}
+      }
     }
   }
   painter.end();

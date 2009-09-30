@@ -78,6 +78,8 @@ private:
   double selPhi;
   double selRadius;
   bool showSelectedRegion;
+  bool showPolarVector;
+  bool showGraticule;
 
   Mat3 rot;
   Mat3 invrot;
