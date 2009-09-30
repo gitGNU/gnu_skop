@@ -43,56 +43,55 @@ PixelDock::PixelDock(QWidget *glview, QWidget *parent)
 }
 
 
-void PixelDock::createControls()
-{
+void PixelDock::createControls(){
   selectedPixelGroup = new QGroupBox(tr("Selected pixel"),this);
-    thetaLabel = new QLabel(tr("theta (rad):"));
-    phiLabel= new QLabel(tr("phi (rad):"));
-    lon= new QLabel(tr("lon (deg):"));
-    lat= new QLabel(tr("lat (deg):"));
-    thetaLabelVal = new QLabel();
-    phiLabelVal= new QLabel();
-    lonVal= new QLabel();
-    latVal= new QLabel();
-    pixelValue= new QLabel(tr("T(N/S):"));
-    pixelValueVal = new QLabel();
-    QGridLayout *pixelLayout = new QGridLayout(selectedPixelGroup);
-    pixelLayout->addWidget(thetaLabel, 0, 0);
-    pixelLayout->addWidget(thetaLabelVal, 0, 1);
-    pixelLayout->addWidget(phiLabel, 0, 2);
-    pixelLayout->addWidget(phiLabelVal, 0, 3);
-    pixelLayout->addWidget(lon, 1, 0);
-    pixelLayout->addWidget(lonVal, 1, 1);
-    pixelLayout->addWidget(lat, 1, 2);
-    pixelLayout->addWidget(latVal, 1, 3);
-    pixelLayout->addWidget(pixelValue, 2, 0);
-    pixelLayout->addWidget(pixelValueVal, 2, 1);
-    selectedPixelGroup->setLayout(pixelLayout);
-
-    selectedRegionGroup = new QGroupBox(tr("Circular region"),this);
-    showSel = new QCheckBox(tr("Draw a circle around selected pixel"),selectedRegionGroup);
-    selRadius = new QDoubleSpinBox(selectedRegionGroup);
-    selRadius->setSuffix(tr("arcmin"));
-    selRadius->setMaximum(180*60);
-    selRadius->setAccelerated(true);
-    addToCatalog = new QPushButton(tr("Add to Catalog"), this);
-    QGridLayout *regionLayout = new QGridLayout(selectedRegionGroup);
-    regionLayout->addWidget(showSel,0,0,1,2);
-    regionLayout->addWidget(selRadius,1,1);
-    regionLayout->addWidget(new QLabel(tr("Radius:"),selectedRegionGroup),1,0);
-    regionLayout->addWidget(addToCatalog,2,0,1,2);
-
-    generalGroup = new QGroupBox("General info",this);
-    nside = new QLabel(tr("nside:"));
-    nsideVal = new QLabel();
-    QGridLayout *generalLayout = new QGridLayout;
-    generalLayout->addWidget(nside, 0, 0);
-    generalLayout->addWidget(nsideVal, 0, 1);
-    generalGroup->setLayout(generalLayout);
-//     connect(maximumSpinBox, SIGNAL(valueChanged(double)),
-// 	    this, SLOT(setMaxBound(double)));
-//     connect(minimumSpinBox, SIGNAL(valueChanged(double)),
-// 	    this, SLOT(setMinBound(double)));
+  thetaLabel = new QLabel(tr("theta (rad):"));
+  phiLabel= new QLabel(tr("phi (rad):"));
+  lon= new QLabel(tr("lon (deg):"));
+  lat= new QLabel(tr("lat (deg):"));
+  thetaLabelVal = new QLabel();
+  phiLabelVal= new QLabel();
+  lonVal= new QLabel();
+  latVal= new QLabel();
+  pixelValue= new QLabel(tr("T(N/S):"));
+  pixelValueVal = new QLabel();
+  QGridLayout *pixelLayout = new QGridLayout(selectedPixelGroup);
+  pixelLayout->addWidget(thetaLabel, 0, 0);
+  pixelLayout->addWidget(thetaLabelVal, 0, 1);
+  pixelLayout->addWidget(phiLabel, 0, 2);
+  pixelLayout->addWidget(phiLabelVal, 0, 3);
+  pixelLayout->addWidget(lon, 1, 0);
+  pixelLayout->addWidget(lonVal, 1, 1);
+  pixelLayout->addWidget(lat, 1, 2);
+  pixelLayout->addWidget(latVal, 1, 3);
+  pixelLayout->addWidget(pixelValue, 2, 0);
+  pixelLayout->addWidget(pixelValueVal, 2, 1);
+  selectedPixelGroup->setLayout(pixelLayout);
+  
+  selectedRegionGroup = new QGroupBox(tr("Circular region"),this);
+  showSel = new QCheckBox(tr("Draw a circle around selected pixel"),selectedRegionGroup);
+  selRadius = new QDoubleSpinBox(selectedRegionGroup);
+  selRadius->setSuffix(tr("arcmin"));
+  selRadius->setMaximum(180*60);
+  selRadius->setAccelerated(true);
+  addToCatalog = new QPushButton(tr("Add to Catalog"), this);
+  QGridLayout *regionLayout = new QGridLayout(selectedRegionGroup);
+  regionLayout->addWidget(showSel,0,0,1,2);
+  regionLayout->addWidget(selRadius,1,1);
+  regionLayout->addWidget(new QLabel(tr("Radius:"),selectedRegionGroup),1,0);
+  regionLayout->addWidget(addToCatalog,2,0,1,2);
+  
+  generalGroup = new QGroupBox("General info",this);
+  nside = new QLabel(tr("nside:"));
+  nsideVal = new QLabel();
+  QGridLayout *generalLayout = new QGridLayout;
+  generalLayout->addWidget(nside, 0, 0);
+  generalLayout->addWidget(nsideVal, 0, 1);
+  generalGroup->setLayout(generalLayout);
+  //     connect(maximumSpinBox, SIGNAL(valueChanged(double)),
+  // 	    this, SLOT(setMaxBound(double)));
+  //     connect(minimumSpinBox, SIGNAL(valueChanged(double)),
+  // 	    this, SLOT(setMinBound(double)));
 }
 
 void PixelDock::update(){

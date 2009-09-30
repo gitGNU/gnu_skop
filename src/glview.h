@@ -49,6 +49,8 @@ public slots:
   void writeCat(string filename);
   void changeSelRadius(double radius);
   void changeSel(int state);
+  void changeGrat(int state);
+  void changeGratRes(int value);
   void addSource();
 signals:
   void pixelSelected(double theta, double phi);
@@ -78,8 +80,11 @@ private:
   double selPhi;
   double selRadius;
   bool showSelectedRegion;
+
   bool showPolarVector;
+
   bool showGraticule;
+  double graticuleRes;
 
   Mat3 rot;
   Mat3 invrot;

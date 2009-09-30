@@ -16,6 +16,8 @@
 # along with SkOP.  If not, see <http://www.gnu.org/licenses/>.
 
 SET(SkOP_SRCS
+  ${SkOP_SOURCE_DIR}/src/overlaydock.h
+  ${SkOP_SOURCE_DIR}/src/overlaydock.cpp
   ${SkOP_SOURCE_DIR}/src/simbaddock.h
   ${SkOP_SOURCE_DIR}/src/simbaddock.cpp
   ${SkOP_SOURCE_DIR}/src/catalog.h

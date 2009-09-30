@@ -45,7 +45,7 @@ GLView::GLView(QWidget *parent)
     selRadius = 10*arcmin2rad;
     showSelectedRegion=false;
     showPolarVector=false;
-    showGraticule=true;
+    showGraticule=false;
     dist = 1;
     minV = 0;
     maxV = 0;
@@ -55,6 +55,7 @@ GLView::GLView(QWidget *parent)
     setAttribute(Qt::WA_NoSystemBackground);
     setMinimumSize(200, 200);
     cat = new Catalog();
+    graticuleRes = 10*degr2rad;
 }
 
 GLView::~GLView()
@@ -238,7 +239,7 @@ void GLView::paintEvent(QPaintEvent *event)
     QPen pen(Qt::white,1);
     painter.setPen(pen);
     double theta,phi;
-    for(double theta=0; theta<2*M_PI;theta+=10*degr2rad){
+    for(double theta=0; theta<2*M_PI;theta+=graticuleRes){
       for(double phi=0; phi<M_PI;phi+=1*degr2rad){
 	int x1,x2,y1,y2;
 	if(sky2pixel(theta, phi,x1,y1) | sky2pixel(theta, phi+1*degr2rad,x2,y2)){
@@ -246,7 +247,7 @@ void GLView::paintEvent(QPaintEvent *event)
 	}
       }
     }
-    for(double phi=0; phi<M_PI;phi+=10*degr2rad){
+    for(double phi=0; phi<M_PI;phi+=graticuleRes){
       for(double theta=0; theta<2*M_PI;theta+=1*degr2rad){
 	int x1,x2,y1,y2;
 	if(sky2pixel(theta, phi,x1,y1) | sky2pixel(theta+1*degr2rad, phi,x2,y2)){
@@ -304,6 +305,17 @@ void GLView::changeSelRadius(double radius){
 void GLView::changeSel(int state){
   if (state == Qt::Checked) showSelectedRegion = true;
   else showSelectedRegion = false;
+  update();
+}
+
+void GLView::changeGrat(int state){
+  if (state == Qt::Checked) showGraticule = true;
+  else showGraticule = false;
+  update();
+}
+
+void GLView::changeGratRes(int value){
+  graticuleRes = value*degr2rad;
   update();
 }
 

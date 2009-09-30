@@ -28,6 +28,7 @@
 #include "sphericalfield.h"
 #include "histodock.h"
 #include "pixeldock.h"
+#include "overlaydock.h"
 #include "preferencedialog.h"
 //#include "healpixfield.h"
 #include <QFileDialog>
@@ -187,6 +188,9 @@ void Skop::createDockWindows()
 
      dock = new QDockWidget(tr("Overlay"), this);
      dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+     QTabWidget * tabwidget = new QTabWidget(dock);
+     tabwidget->addTab(new GraticuleTab(glview),"Graticule");
+     dock->setWidget(tabwidget);
      addDockWidget(Qt::LeftDockWidgetArea, dock);
      viewMenu->addAction(dock->toggleViewAction());
      
