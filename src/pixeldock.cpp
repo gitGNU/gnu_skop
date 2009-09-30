@@ -100,7 +100,8 @@ void PixelDock::update(){
   phiLabelVal->setNum(phi);
   lonVal->setNum(fmodulo(phi,M_PI*2)*180/M_PI);
   latVal->setNum(90-(fmodulo(theta,M_PI)*180/M_PI));
-  pixelValueVal->setNum(map.data(PointerRole).value<SphericalField *>()->getValue(theta,phi));
+  if (map.data(PointerRole).value<SphericalField *>() != NULL)
+    pixelValueVal->setNum(map.data(PointerRole).value<SphericalField *>()->getValue(theta,phi));
   nsideVal->setNum(sqrt(map.data(NsideRole).toInt()/12));
   pixelValue->setText(tr("T(%1):").arg(map.data(UnitRole).toString()));
 }
